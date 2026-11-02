@@ -1,0 +1,59 @@
+{
+  "common": {
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "retry": "حاول مرة أخرى"
+  },
+  "onboarding": {
+    "message": "مرحبا بكم في موقع تطبيق obytes"
+  },
+  "products": {
+    "add_title": "إضافة منتج",
+    "created": "تم إنشاء المنتج",
+    "delete_confirm_title": "حذف هذا المنتج؟",
+    "deleted": "تم حذف المنتج",
+    "detail_title": "المنتج",
+    "edit_title": "تعديل المنتج",
+    "error_loading": "تعذر تحميل المنتجات",
+    "form": {
+      "category": "الفئة",
+      "create": "إنشاء منتج",
+      "description": "الوصف",
+      "price": "السعر",
+      "save": "حفظ التغييرات",
+      "stock": "المخزون",
+      "title": "العنوان"
+    },
+    "search_placeholder": "ابحث عن المنتجات",
+    "updated": "تم تحديث المنتج"
+  },
+  "settings": {
+    "about": "حول التطبيق ",
+    "app_name": "اسم التطبيق",
+    "arabic": "عربي",
+    "english": "إنجليزي",
+    "generale": "عام",
+    "github": "جيثب",
+    "language": "لغة",
+    "links": "الروابط",
+    "logout": "تسجيل خروج",
+    "more": "أكثر",
+    "privacy": "سياسة الخصوصية",
+    "rate": "تقييم",
+    "share": "شارك",
+    "support": "الدعم",
+    "support_us": "ادعمنا",
+    "terms": "شروط الخدمة",
+    "theme": {
+      "dark": "مظلم",
+      "light": "خفيفة",
+      "system": "System",
+      "title": "سمة"
+    },
+    "title": "إعدادات",
+    "version": "إصدار",
+    "website": "موقع الكتروني"
+  },
+  "welcome": "test arabic"
+}

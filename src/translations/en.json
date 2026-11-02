@@ -1,0 +1,59 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "retry": "Try again"
+  },
+  "onboarding": {
+    "message": "Welcome to obytes app site"
+  },
+  "products": {
+    "add_title": "Add Product",
+    "created": "Product created",
+    "delete_confirm_title": "Delete this product?",
+    "deleted": "Product deleted",
+    "detail_title": "Product",
+    "edit_title": "Edit Product",
+    "error_loading": "Could not load products",
+    "form": {
+      "category": "Category",
+      "create": "Create Product",
+      "description": "Description",
+      "price": "Price",
+      "save": "Save Changes",
+      "stock": "Stock",
+      "title": "Title"
+    },
+    "search_placeholder": "Search products",
+    "updated": "Product updated"
+  },
+  "settings": {
+    "about": "About",
+    "app_name": "App Name",
+    "arabic": "Arabic",
+    "english": "English",
+    "generale": "General",
+    "github": "Github",
+    "language": "Language",
+    "links": "Links",
+    "logout": "Logout",
+    "more": "More",
+    "privacy": "Privacy Policy",
+    "rate": "Rate",
+    "share": "Share",
+    "support": "Support",
+    "support_us": "Support Us",
+    "terms": "Terms of Service",
+    "theme": {
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System",
+      "title": "Theme"
+    },
+    "title": "Settings",
+    "version": "Version",
+    "website": "Website"
+  },
+  "welcome": "Welcome to obytes app site"
+}

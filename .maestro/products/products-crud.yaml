@@ -1,0 +1,42 @@
+# End-to-end: open Products, view a product, validate + submit the create form.
+# Run: pnpm e2e-test   (requires a development build installed on a simulator/emulator)
+appId: ${APP_ID}
+---
+- launchApp
+- runFlow: ../utils/onboarding-and-login.yaml
+- tapOn:
+    id: products-tab
+- assertVisible:
+    id: product-card-1
+- tapOn:
+    id: product-card-1
+- assertVisible:
+    id: product-detail-title
+- assertVisible: Edit
+- assertVisible: Delete
+- back
+- tapOn:
+    id: add-product-link
+- assertVisible: Add Product
+- tapOn:
+    id: product-submit-button
+- assertVisible: Title must be at least 3 characters
+- tapOn:
+    id: product-title-input
+- inputText: Running Shoes
+- tapOn:
+    id: product-description-input
+- inputText: Lightweight shoes for daily runs
+- tapOn:
+    id: product-category-input
+- inputText: fashion
+- tapOn:
+    id: product-price-input
+- inputText: '49.99'
+- tapOn:
+    id: product-stock-input
+- inputText: '10'
+- runFlow: ../utils/hide-keyboard.yaml
+- tapOn:
+    id: product-submit-button
+- assertVisible: Product created
