@@ -96,3 +96,12 @@ Every screen inside `(app)` is protected automatically. When the API returns 401
 1. Create `src/app/(app)/orders.tsx` (one-line re-export)
 2. Add a `<Tabs.Screen name="orders" options={{ title, tabBarIcon, tabBarButtonTestID }} />` in `app/(app)/_layout.tsx`
 3. Icons live in `src/components/ui/icons/`
+
+## 📖 Further reading
+
+- [Core concepts of file-based routing](https://docs.expo.dev/router/basics/core-concepts/) (Expo): files, folders, groups and dynamic routes
+- [Layouts](https://docs.expo.dev/router/basics/layout/) (Expo): what `_layout.tsx` does for stacks and tabs
+- [URL parameters](https://docs.expo.dev/router/reference/url-parameters/) (Expo): `useLocalSearchParams` vs `useGlobalSearchParams`
+- [Simplifying auth flows with protected routes](https://expo.dev/blog/simplifying-auth-flows-with-protected-routes) (Expo blog): the newer `Stack.Protected` guard. Our app uses `<Redirect>`; compare the two
+- [Nesting tabs and drawers with Expo Router](https://expo.dev/blog/nesting-tabs-and-drawers-with-expo) (Expo blog): combining navigators without confusing users
+- [Linking overview](https://docs.expo.dev/linking/overview/) (Expo): deep links into a screen

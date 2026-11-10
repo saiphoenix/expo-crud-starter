@@ -17,7 +17,8 @@ Our team's React Native starter template — Expo + TypeScript + Expo Router + R
 git clone <this-repo-url> my-app
 cd my-app
 pnpm install
-pnpm android        # or: pnpm ios (macOS)
+pnpm mock:api       # terminal 1 — local JSON backend (keep running)
+pnpm android        # terminal 2 — or: pnpm ios (macOS)
 ```
 
 Then: Onboarding → Login (any email + 6-char password) → **Products** tab.
@@ -36,7 +37,7 @@ New here? **Start with [`docs/README.md`](./docs/README.md)** and read docs 1–
 | [Routing & Navigation](./docs/06-routing-navigation.md) | Expo Router, tabs, auth guard |
 | [Forms & Validation](./docs/07-forms-and-validation.md) | TanStack Form + Zod |
 | [State & Storage](./docs/08-state-and-storage.md) | React Query vs Zustand vs MMKV |
-| [UI, Styling & i18n](./docs/09-ui-styling-i18n.md) | UI kit, Tailwind (Uniwind), translations |
+| [UI, Styling & i18n](./docs/09-ui-styling-i18n.md) | UI basics, theme tokens & dark mode, accessibility, translations |
 | [Testing](./docs/10-testing.md) | Jest, Testing Library, Maestro |
 | [Code Quality & Git](./docs/11-code-quality-and-git.md) | Lint, Husky, commits, PRs |
 | [Environments & Builds](./docs/12-environments-and-builds.md) | dev / preview / prod, EAS, OTA, new-project setup |
@@ -60,7 +61,14 @@ src/features/products/
 └── components/               # product-card, product-form (shared by create + edit)
 ```
 
-Practice API: [DummyJSON](https://dummyjson.com/docs/products) (writes are simulated — nothing is really saved).
+Backend for practice: a **local mock API** (`mock-api/`) that saves every create/update/delete into `mock-api/db.json`:
+
+```bash
+pnpm mock:api      # terminal 1 — http://localhost:3001
+pnpm start -c      # terminal 2 — the app
+```
+
+See [docs/16 · Mock API](./docs/16-mock-api.md). New here? Read [docs/17 · Research & Explore](./docs/17-research-and-explore.md) for every library used and what to study.
 
 ## 🛠 Stack
 

@@ -1,35 +1,33 @@
-/* eslint-disable better-tailwindcss/no-unknown-classes */
 import type { TextInputProps } from 'react-native';
 import * as React from 'react';
 import { I18nManager, TextInput as NTextInput, StyleSheet, View } from 'react-native';
 import { tv } from 'tailwind-variants';
 
-import colors from './colors';
 import { Text } from './text';
 
 const inputTv = tv({
   slots: {
     container: 'mb-2',
-    label: 'text-grey-100 mb-1 text-lg dark:text-neutral-100',
+    label: 'mb-1 text-lg text-foreground',
     input:
-      'font-inter mt-0 rounded-xl border-[0.5px] border-neutral-300 bg-neutral-100 px-4 py-3 text-base/5 font-medium dark:border-neutral-700 dark:bg-neutral-800 dark:text-white',
+      'mt-0 rounded-xl border px-4 py-3 font-inter text-base/5 font-medium border-input bg-muted text-foreground',
   },
 
   variants: {
     focused: {
       true: {
-        input: 'border-neutral-400 dark:border-neutral-300',
+        input: 'border-ring',
       },
     },
     error: {
       true: {
-        input: 'border-danger-600',
-        label: 'text-danger-600 dark:text-danger-600',
+        input: 'border-destructive',
+        label: 'text-destructive',
       },
     },
     disabled: {
       true: {
-        input: 'bg-neutral-200',
+        input: 'opacity-60',
       },
     },
   },
@@ -85,7 +83,8 @@ export function Input({ ref, ...props }: NInputProps & { ref?: React.Ref<NTextIn
       <NTextInput
         testID={testID}
         ref={ref}
-        placeholderTextColor={colors.neutral[400]}
+        placeholderTextColorClassName="accent-muted-foreground"
+        accessibilityLabel={label}
         className={styles.input()}
         onBlur={onBlur}
         onFocus={onFocus}
@@ -99,7 +98,8 @@ export function Input({ ref, ...props }: NInputProps & { ref?: React.Ref<NTextIn
       {error && (
         <Text
           testID={testID ? `${testID}-error` : undefined}
-          className="text-sm text-danger-400 dark:text-danger-600"
+          className="text-sm text-destructive"
+          accessibilityLiveRegion="polite"
         >
           {error}
         </Text>

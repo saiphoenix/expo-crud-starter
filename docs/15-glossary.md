@@ -45,3 +45,8 @@
 | **CI** | Automated checks on every PR (GitHub Actions) |
 | **PR** | Pull Request — asking the team to review and merge your branch |
 | **Conventional Commits** | Commit message format: `type(scope): description` |
+
+## 📖 Further reading
+
+- [About the New Architecture](https://reactnative.dev/architecture/landing-page) (React Native): Fabric, TurboModules and JSI in plain words
+- [Expo Go vs Development Builds](https://expo.dev/blog/expo-go-vs-development-builds) (Expo blog): two terms new mobile developers mix up most

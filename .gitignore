@@ -21,3 +21,5 @@ yarn-error.log
 
 expo-env.d.ts
 # @end expo-cli
+# Local mock API data (auto-created from mock-api/db.seed.json)
+mock-api/db.json

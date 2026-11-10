@@ -57,7 +57,7 @@ pnpm build:production:ios       # EAS production build
 - **Team docs**: `docs/` (start at `docs/README.md`)
 - **Data fetching**: Use plain React Query hooks per `src/features/products/api.ts` (the feed example uses react-query-kit)
 - **Global state**: Use Zustand (see `src/features/auth/use-auth-store.tsx`)
-- **Styling**: NativeWind/Tailwind classes (see `src/components/ui/button.tsx`)
+- **Styling**: Uniwind (Tailwind v4) classes with semantic theme tokens from `src/global.css` (`bg-background`, `text-foreground`, `bg-primary`, …). Never hard-code colours or add `dark:` pairs; see `docs/09-ui-styling-i18n.md`
 - **Storage**: Use MMKV via `src/lib/storage.tsx` for sensitive data
 - **Imports**: Use `@/` prefix across folders; relative imports only within the same feature
 

@@ -19,7 +19,8 @@
 | Data doesn't update after create/update/delete | Missing `invalidateQueries`, or a hand-typed key that doesn't match |
 | Duplicate items in an infinite list | `fetchNextPage` without the `!isFetchingNextPage` guard |
 | `Cannot read property 'title' of undefined` | Used `data` before checking `isPending` / `isError` |
-| Created product not in list / 404 on its detail | DummyJSON doesn't really save — expected (see [API Layer](./04-api-layer.md#43-the-practice-api-dummyjson)) |
+| Created product not in list / 404 on its detail | You're on DummyJSON, which doesn't really save. Use the local mock API ([16 · Mock API](./16-mock-api.md)) |
+| `Network Error` / "No internet connection" on every screen | Mock API not running → `pnpm mock:api`. On Android emulator use `http://10.0.2.2:3001/`. Changed `.env`? → `pnpm start -c` |
 | Env var is `undefined` / validation warning | Not in `.env` **and** `env.ts`, or Metro not restarted with `-c` |
 | `requireNativeComponent` / "native module not found" | Native library added but dev client not rebuilt |
 | Commit blocked: "Direct commits to the main branch…" | You're on `main` — create a branch |
@@ -66,3 +67,12 @@ Screenshot:     (attached)
 ```
 
 AI assistants are welcome (see `claude.md` in the root), but **you must understand every line you commit**.
+
+## 📖 Further reading
+
+- [Debugging runtime issues](https://docs.expo.dev/debugging/runtime-issues/) (Expo): a step-by-step way to find the cause of a crash
+- [React Native DevTools](https://reactnative.dev/docs/react-native-devtools) (React Native): breakpoints, console and component inspection
+- [Dev tools plugins](https://docs.expo.dev/debugging/devtools-plugins/) (Expo): the React Query plugin opened with `shift + m`
+- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect) (React): the most common source of loops and stale data
+- [Fix the slow render before you fix the re-render](https://kentcdodds.com/blog/fix-the-slow-render-before-you-fix-the-re-render) (Kent C. Dodds): where to look first when a screen is slow
+- [The React Native Optimization Guide](https://www.callstack.com/ebooks/the-ultimate-guide-to-react-native-optimization) (Callstack): a free deep dive for later

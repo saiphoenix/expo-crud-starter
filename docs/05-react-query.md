@@ -126,3 +126,14 @@ The template's **Feed** example (`src/features/feed/api.ts`) uses [`react-query-
 With the app running, press `shift + m` in the Metro terminal and open the **React Query** dev tools plugin (wired via `@dev-plugins/react-query` in `provider.tsx`). You can see every key, its data, and whether it's fresh or stale.
 
 > 🔜 Deep dives later: optimistic updates, prefetching on press, offline persistence.
+
+## 📖 Further reading
+
+- [Practical React Query](https://tkdodo.eu/blog/practical-react-query) (TkDodo): the defaults (staleTime, refetching) and why they exist. Start here
+- [Effective React Query Keys](https://tkdodo.eu/blog/effective-react-query-keys) (TkDodo): the query-key factory pattern in `query-keys.ts`
+- [Mastering Mutations in React Query](https://tkdodo.eu/blog/mastering-mutations-in-react-query) (TkDodo): mutate vs mutateAsync, callbacks, cache updates
+- [Automatic Query Invalidation after Mutations](https://tkdodo.eu/blog/automatic-query-invalidation-after-mutations) (TkDodo): keeping lists fresh after create/update/delete
+- [Status Checks in React Query](https://tkdodo.eu/blog/status-checks-in-react-query) (TkDodo): the right order to check pending, error and data
+- [The Query Options API](https://tkdodo.eu/blog/the-query-options-api) (TkDodo): sharing query definitions between hooks safely
+- [Concurrent Optimistic Updates in React Query](https://tkdodo.eu/blog/concurrent-optimistic-updates-in-react-query) (TkDodo): instant UI updates, done safely
+- [React Query and TypeScript](https://tkdodo.eu/blog/react-query-and-type-script) (TkDodo): typing hooks without fighting the library

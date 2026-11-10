@@ -3,36 +3,42 @@ import {
   DarkTheme as _DarkTheme,
   DefaultTheme,
 } from '@react-navigation/native';
-import { useUniwind } from 'uniwind';
+import * as React from 'react';
+import { useCSSVariable, useUniwind } from 'uniwind';
 
-import colors from '@/components/ui/colors';
+function pick(value: string | number | undefined, fallback: string) {
+  return typeof value === 'string' && value.length > 0 ? value : fallback;
+}
 
-const DarkTheme: Theme = {
-  ..._DarkTheme,
-  colors: {
-    ..._DarkTheme.colors,
-    primary: colors.primary[200],
-    background: colors.charcoal[950],
-    text: colors.charcoal[100],
-    border: colors.charcoal[500],
-    card: colors.charcoal[850],
-  },
-};
-
-const LightTheme: Theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: colors.primary[400],
-    background: colors.white,
-  },
-};
-
-export function useThemeConfig() {
+/**
+ * Navigation theme (headers, tab bar, screen background) built from the SAME
+ * semantic tokens as the rest of the UI (`src/global.css`), so navigation and
+ * screens always match in light and dark mode. Change colours in global.css only.
+ */
+export function useThemeConfig(): Theme {
   const { theme } = useUniwind();
+  const [primary, background, card, text, border, notification] = useCSSVariable([
+    '--color-primary',
+    '--color-background',
+    '--color-card',
+    '--color-foreground',
+    '--color-border',
+    '--color-destructive',
+  ]);
 
-  if (theme === 'dark')
-    return DarkTheme;
-
-  return LightTheme;
+  return React.useMemo(() => {
+    const base = theme === 'dark' ? _DarkTheme : DefaultTheme;
+    return {
+      ...base,
+      colors: {
+        ...base.colors,
+        primary: pick(primary, base.colors.primary),
+        background: pick(background, base.colors.background),
+        card: pick(card, base.colors.card),
+        text: pick(text, base.colors.text),
+        border: pick(border, base.colors.border),
+        notification: pick(notification, base.colors.notification),
+      },
+    };
+  }, [theme, primary, background, card, text, border, notification]);
 }

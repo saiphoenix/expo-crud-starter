@@ -1,53 +1,68 @@
-/* eslint-disable better-tailwindcss/no-unknown-classes */
 import type { PressableProps, View } from 'react-native';
 import type { VariantProps } from 'tailwind-variants';
 import * as React from 'react';
 import { ActivityIndicator, Pressable, Text } from 'react-native';
 import { tv } from 'tailwind-variants';
 
+/**
+ * Button — colours come from the semantic tokens in `src/global.css`
+ * (bg-primary, text-primary-foreground, …), so light and dark mode work
+ * without `dark:` classes.
+ *
+ * Standards built in:
+ * - Minimum touch target 44pt (Apple HIG) — `sm` keeps a small look but gets hitSlop
+ * - Pressed feedback with `active:opacity-80`
+ * - Screen readers hear "button", plus "disabled" / "busy" when relevant
+ */
 const button = tv({
   slots: {
-    container: 'my-2 flex flex-row items-center justify-center rounded-md px-4',
+    container: 'my-2 flex flex-row items-center justify-center rounded-md px-4 active:opacity-80',
     label: 'font-inter text-base font-semibold',
-    indicator: 'h-6 text-white',
+    // `accent-*` classes set the spinner's colour prop (Uniwind convention)
+    indicator: 'accent-background',
   },
 
   variants: {
     variant: {
       default: {
-        container: 'bg-black dark:bg-white',
-        label: 'text-white dark:text-black',
-        indicator: 'text-white dark:text-black',
+        container: 'bg-foreground',
+        label: 'text-background',
+        indicator: 'accent-background',
+      },
+      primary: {
+        container: 'bg-primary',
+        label: 'text-primary-foreground',
+        indicator: 'accent-primary-foreground',
       },
       secondary: {
-        container: 'bg-primary-600',
-        label: 'text-secondary-600',
-        indicator: 'text-white',
+        container: 'bg-secondary',
+        label: 'text-secondary-foreground',
+        indicator: 'accent-secondary-foreground',
       },
       outline: {
-        container: 'border border-neutral-400',
-        label: 'text-black dark:text-neutral-100',
-        indicator: 'text-black dark:text-neutral-100',
+        container: 'border bg-transparent border-border',
+        label: 'text-foreground',
+        indicator: 'accent-foreground',
       },
       destructive: {
-        container: 'bg-red-600',
-        label: 'text-white',
-        indicator: 'text-white',
+        container: 'bg-destructive',
+        label: 'text-destructive-foreground',
+        indicator: 'accent-destructive-foreground',
       },
       ghost: {
         container: 'bg-transparent',
-        label: 'text-black underline dark:text-white',
-        indicator: 'text-black dark:text-white',
+        label: 'underline text-foreground',
+        indicator: 'accent-foreground',
       },
       link: {
         container: 'bg-transparent',
-        label: 'text-black',
-        indicator: 'text-black',
+        label: 'text-primary',
+        indicator: 'accent-primary',
       },
     },
     size: {
       default: {
-        container: 'h-10 px-4',
+        container: 'h-11 px-4',
         label: 'text-base',
       },
       lg: {
@@ -55,17 +70,16 @@ const button = tv({
         label: 'text-xl',
       },
       sm: {
-        container: 'h-8 px-3',
+        container: 'h-9 px-3',
         label: 'text-sm',
-        indicator: 'h-2',
       },
-      icon: { container: 'size-9' },
+      icon: { container: 'size-11' },
     },
     disabled: {
       true: {
-        container: 'bg-neutral-300 dark:bg-neutral-300',
-        label: 'text-neutral-600 dark:text-neutral-600',
-        indicator: 'text-neutral-400 dark:text-neutral-400',
+        container: 'bg-muted',
+        label: 'text-muted-foreground',
+        indicator: 'accent-muted-foreground',
       },
     },
     fullWidth: {
@@ -85,6 +99,9 @@ const button = tv({
   },
 });
 
+// Extra touch area for the small button so it still meets the 44pt minimum.
+const SMALL_HIT_SLOP = { top: 6, bottom: 6, left: 6, right: 6 };
+
 type ButtonVariants = VariantProps<typeof button>;
 type Props = {
   label?: string;
@@ -98,11 +115,16 @@ export function Button({ ref, label: text, loading = false, variant = 'default',
     () => button({ variant, disabled, size }),
     [variant, disabled, size],
   );
+  const isDisabled = Boolean(disabled || loading);
 
   return (
     <Pressable
-      disabled={disabled || loading}
+      disabled={isDisabled}
       className={styles.container({ className })}
+      accessibilityRole="button"
+      accessibilityLabel={text}
+      accessibilityState={{ disabled: isDisabled, busy: loading }}
+      hitSlop={size === 'sm' ? SMALL_HIT_SLOP : undefined}
       {...props}
       ref={ref}
       testID={testID}
@@ -117,7 +139,7 @@ export function Button({ ref, label: text, loading = false, variant = 'default',
                 ? (
                     <ActivityIndicator
                       size="small"
-                      className={styles.indicator()}
+                      colorClassName={styles.indicator()}
                       testID={testID ? `${testID}-activity-indicator` : undefined}
                     />
                   )

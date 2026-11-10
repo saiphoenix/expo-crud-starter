@@ -1,3 +1,8 @@
+// Raw colour PALETTE, mirrored from `@theme` in src/global.css, for the few
+// places that need a colour value in JavaScript (e.g. SVG props).
+// For UI, prefer the semantic theme tokens (bg-background, text-foreground,
+// bg-primary, …) defined in global.css — they adapt to light and dark mode.
+// Need a token's value in JS? Use `useCSSVariable('--color-primary')` from uniwind.
 module.exports = {
   white: '#ffffff',
   black: '#000000',

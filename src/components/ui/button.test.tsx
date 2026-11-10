@@ -82,7 +82,7 @@ describe('button component ', () => {
     const button = screen.getByTestId('button');
     // TODO: should be fixed to use haveStyle instead of comparing the class name
     const expectedStyle
-      = 'font-inter font-semibold text-white dark:text-black text-xl';
+      = 'font-inter font-semibold text-background text-xl';
     const receivedStyle
       = button.props.children[0].props.children.props.className;
     expect(receivedStyle).toContain(expectedStyle);
@@ -92,7 +92,7 @@ describe('button component ', () => {
     const button = screen.getByTestId('button');
 
     const expectedStyle
-      = 'font-inter font-semibold text-secondary-600 text-base';
+      = 'font-inter font-semibold text-secondary-foreground text-base';
     const receivedStyle
       = button.props.children[0].props.children.props.className;
     expect(receivedStyle).toContain(expectedStyle);
@@ -102,9 +102,15 @@ describe('button component ', () => {
     const button = screen.getByTestId('button');
 
     const expectedStyle
-      = 'font-inter font-semibold text-base text-neutral-600 dark:text-neutral-600';
+      = 'font-inter font-semibold text-base text-muted-foreground';
     const receivedStyle
       = button.props.children[0].props.children.props.className;
     expect(receivedStyle).toContain(expectedStyle);
+  });
+  it('should expose button role and disabled/busy state to screen readers', () => {
+    render(<Button testID="button" label="Submit" loading />);
+    const button = screen.getByTestId('button');
+    expect(button.props.accessibilityRole).toBe('button');
+    expect(button.props.accessibilityState).toEqual({ disabled: true, busy: true });
   });
 });

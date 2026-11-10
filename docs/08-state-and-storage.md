@@ -54,3 +54,11 @@ removeItem('has_seen_tip');
 Values are JSON-serialised, so you can store objects. Don't use AsyncStorage.
 
 > 🔒 **Security note:** MMKV is not encrypted unless you pass an encryption key. For production apps with sensitive data (refresh tokens, personal data), consider [`expo-secure-store`](https://docs.expo.dev/versions/latest/sdk/securestore/) or an encrypted MMKV instance. Agree on this with your lead per project.
+
+## 📖 Further reading
+
+- [Working with Zustand](https://tkdodo.eu/blog/working-with-zustand) (TkDodo): selectors, actions and keeping stores small
+- [Prevent rerenders with useShallow](https://zustand.docs.pmnd.rs/learn/guides/prevent-rerenders-with-use-shallow) (Zustand): why selectors matter for performance
+- [Don't Sync State. Derive It!](https://kentcdodds.com/blog/dont-sync-state-derive-it) (Kent C. Dodds): calculate values instead of storing copies
+- [Choosing the state structure](https://react.dev/learn/choosing-the-state-structure) (React): avoid duplicated and contradictory state
+- [Store data](https://docs.expo.dev/develop/user-interface/store-data/) (Expo): MMKV, AsyncStorage, SecureStore and SQLite compared

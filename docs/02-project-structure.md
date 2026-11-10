@@ -125,3 +125,11 @@ import Env from 'env';
 //    If two features need it, move it to components/ui or lib.
 // ❌ Don't create new index.ts "barrel" files inside features — import the exact file.
 ```
+
+## 📖 Further reading
+
+- [React Folder Structure in 5 Steps](https://www.robinwieruch.de/react-folder-structure/) (Robin Wieruch): how a codebase grows from flat files to feature folders
+- [Project structure](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md) (Bulletproof React): the feature-folder layout and import rules we follow
+- [Colocation](https://kentcdodds.com/blog/colocation) (Kent C. Dodds): keep code next to where it is used
+- [Screaming Architecture](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html) (Robert C. Martin): why folders should be named after features, not file types
+- [Core concepts of file-based routing](https://docs.expo.dev/router/basics/core-concepts/) (Expo): why `src/app/` files are routes

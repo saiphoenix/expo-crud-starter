@@ -109,3 +109,10 @@ Open a PR using the checklist in [Code Quality & Git](./11-code-quality-and-git.
 - [ ] Tests
 - [ ] Android + iOS checked
 - [ ] `pnpm check-all` ✅ → PR
+
+## 📖 Further reading
+
+- [Thinking in React](https://react.dev/learn/thinking-in-react) (React): turning a design into components before coding
+- [Effective React Query Keys](https://tkdodo.eu/blog/effective-react-query-keys) (TkDodo): getting `query-keys.ts` right for your feature
+- [AHA Programming](https://kentcdodds.com/blog/aha-programming) (Kent C. Dodds): when to copy a pattern and when to abstract it
+- [Colocation](https://kentcdodds.com/blog/colocation) (Kent C. Dodds): what goes inside your feature folder

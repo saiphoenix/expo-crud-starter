@@ -95,15 +95,17 @@ export type ProductInput = Pick<Product, 'title' | 'description' | 'category' | 
 | Update | `PUT` / `PATCH` | `/products/5` |
 | Delete | `DELETE` | `/products/5` |
 
-## 4.3 The practice API (DummyJSON)
+## 4.3 The practice APIs
 
-We learn against [dummyjson.com](https://dummyjson.com/docs/products). It's free, needs no key, and supports all CRUD calls.
+| | Local mock API (**default**) | DummyJSON (remote) |
+|---|---|---|
+| `.env` | `EXPO_PUBLIC_API_URL=http://localhost:3001/` | `EXPO_PUBLIC_API_URL=https://dummyjson.com/` |
+| Start | `pnpm mock:api` | nothing, it's online |
+| Create / Update / Delete | ✅ **really saved** to `mock-api/db.json` | ⚠️ simulated, nothing is saved |
 
-> ⚠️ **Create / update / delete are simulated.** The server answers as if it worked but doesn't save anything. So:
-> - a product you **create** won't appear in the list after refresh (and its detail page 404s),
-> - an **edit** shows on the detail screen (we cache the response) but the list shows the original after refetch.
->
-> That's expected — your code is correct. Switch `EXPO_PUBLIC_API_URL` to the real backend when it's ready.
+Both return the **same JSON shape**, so `service.ts` works with either. Only the base URL changes. See [16 · Mock API](./16-mock-api.md).
+
+> On DummyJSON, a product you create won't appear in the list (and its detail page 404s), and edits revert after a refetch. That's expected, not a bug in your code.
 
 ## 4.4 Environment variables
 
@@ -121,3 +123,12 @@ To add a new variable: add it to the schema **and** the `_env` object in `env.ts
 - [ ] One function in `service.ts` using `client`
 - [ ] A hook in `api.ts` (next doc)
 - [ ] A unit test for the service URL/params (see `service.test.ts`)
+
+## 📖 Further reading
+
+- [Interceptors](https://axios-http.com/docs/interceptors) (Axios): how the token and error handling in `client.tsx` work
+- [HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods) (MDN): GET, POST, PUT, PATCH and DELETE in detail
+- [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) (MDN): what 200, 201, 400, 401, 404 and 500 mean
+- [React Query Error Handling](https://tkdodo.eu/blog/react-query-error-handling) (TkDodo): where API errors should be shown to the user
+- [Web API design best practices](https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design) (Microsoft): how good REST endpoints are named and paginated
+- [Environment variables in Expo](https://docs.expo.dev/guides/environment-variables/) (Expo): why `EXPO_PUBLIC_` values are not secret
