@@ -94,3 +94,11 @@ const form = useForm({
 - [ ] Submit button shows a spinner and can't be double-tapped while saving
 - [ ] Errors appear under the field, in text (not colour only)
 - [ ] Every input has a `testID` for tests
+
+## 📖 Further reading
+
+- [Basic concepts](https://tanstack.com/form/latest/docs/framework/react/guides/basic-concepts) (TanStack Form): form instance, fields and field state
+- [Form and field validation](https://tanstack.com/form/latest/docs/framework/react/guides/validation) (TanStack Form): when validators run (onChange, onBlur, onSubmit)
+- [Basic usage](https://zod.dev/basics) (Zod): `parse`, `safeParse` and inferring types from schemas
+- [React Query and Forms](https://tkdodo.eu/blog/react-query-and-forms) (TkDodo): loading server data into a form and saving it back
+- [Components overview](https://kirillzyusko.github.io/react-native-keyboard-controller/docs/guides/components-overview) (Keyboard Controller): keeping inputs above the keyboard

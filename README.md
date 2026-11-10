@@ -37,7 +37,7 @@ New here? **Start with [`docs/README.md`](./docs/README.md)** and read docs 1–
 | [Routing & Navigation](./docs/06-routing-navigation.md) | Expo Router, tabs, auth guard |
 | [Forms & Validation](./docs/07-forms-and-validation.md) | TanStack Form + Zod |
 | [State & Storage](./docs/08-state-and-storage.md) | React Query vs Zustand vs MMKV |
-| [UI, Styling & i18n](./docs/09-ui-styling-i18n.md) | UI kit, Tailwind (Uniwind), translations |
+| [UI, Styling & i18n](./docs/09-ui-styling-i18n.md) | UI basics, theme tokens & dark mode, accessibility, translations |
 | [Testing](./docs/10-testing.md) | Jest, Testing Library, Maestro |
 | [Code Quality & Git](./docs/11-code-quality-and-git.md) | Lint, Husky, commits, PRs |
 | [Environments & Builds](./docs/12-environments-and-builds.md) | dev / preview / prod, EAS, OTA, new-project setup |

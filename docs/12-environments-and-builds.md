@@ -63,3 +63,12 @@ Do these once, right after cloning for a new client/app:
 - [ ] Delete the example features you don't need (`feed`, `style-demo`) + their routes
 - [ ] Keep `features/products` until the team has built their first real feature, then delete it
 - [ ] Update the root `README.md` (project name, backend URL, who to ask)
+
+## 📖 Further reading
+
+- [Configure EAS Build with eas.json](https://docs.expo.dev/build/eas-json/) (Expo): what development, preview and production profiles do
+- [Configure multiple app variants](https://docs.expo.dev/tutorial/eas/multiple-app-variants/) (Expo): installing dev and production apps side by side
+- [App version management](https://docs.expo.dev/build-reference/app-versions/) (Expo): version vs build number
+- [EAS Update best practices](https://expo.dev/blog/eas-update-best-practices) (Expo blog): channels, branches and safe releases
+- [5 OTA update best practices every mobile team should know](https://expo.dev/blog/5-ota-update-best-practices-every-mobile-team-should-know) (Expo blog): what over-the-air updates can and cannot fix
+- [Runtime versions and updates](https://docs.expo.dev/eas-update/runtime-versions/) (Expo): why an update must match the native build

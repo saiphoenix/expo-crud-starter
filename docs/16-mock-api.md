@@ -94,3 +94,9 @@ curl -X POST http://localhost:3001/products/add \
 5. Build a second feature (e.g. **Orders**) end to end using [13 · Adding a New Feature](./13-adding-a-new-feature.md) against this server.
 
 > ⚠️ This is a **learning tool**, not a real backend: no auth, no concurrency safety, one JSON file. Production apps talk to a real API.
+
+## 📖 Further reading
+
+- [HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods) (MDN): what each method should do on a server
+- [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) (MDN): choosing 201, 400, 404 or 409 in `server.js`
+- [Web API design best practices](https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design) (Microsoft): naming, pagination and filtering in REST APIs

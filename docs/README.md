@@ -64,12 +64,14 @@ Read these in order during your first week. Each one is short.
 | Unit tests | `src/features/products/*.test.ts(x)` |
 | An E2E test | `.maestro/products/products-crud.yaml` |
 
-## External docs
+## Further reading
 
-- Obytes Starter docs: https://starter.obytes.com
-- Expo: https://docs.expo.dev
-- React Native: https://reactnative.dev
-- TanStack Query: https://tanstack.com/query/latest
-- TanStack Form: https://tanstack.com/form/latest
-- Zod: https://zod.dev
-- Local mock API: [16 · Mock API](./16-mock-api.md) · DummyJSON (remote practice API): https://dummyjson.com/docs
+Every guide ends with a **📖 Further reading** list: specific articles for the ideas on that page, not just library home pages. If you only have time for five, start with these:
+
+1. [Practical React Query](https://tkdodo.eu/blog/practical-react-query) (TkDodo): how our data layer thinks
+2. [Expo Go vs Development Builds](https://expo.dev/blog/expo-go-vs-development-builds) (Expo blog): why this app needs a dev build
+3. [Thinking in React](https://react.dev/learn/thinking-in-react) (React): turning a design into components
+4. [Color roles](https://m3.material.io/styles/color/roles) (Material Design 3): the idea behind our theme tokens (see [doc 09](./09-ui-styling-i18n.md))
+5. [Write tests. Not too many. Mostly integration.](https://kentcdodds.com/blog/write-tests) (Kent C. Dodds): what to test
+
+For every library in the repo, see [17 · Research & Explore](./17-research-and-explore.md). Practice APIs: [16 · Mock API](./16-mock-api.md) (local, default) or [DummyJSON](https://dummyjson.com/docs) (remote).

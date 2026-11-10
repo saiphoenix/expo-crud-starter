@@ -73,3 +73,11 @@ ProductEditScreen
 5. After every mutation, **invalidate** (or update) the affected query keys.
 
 > 🧠 Before writing code, ask: *"Which layer does this belong to?"* If you can't answer, ask a teammate.
+
+## 📖 Further reading
+
+- [Why You Want React Query](https://tkdodo.eu/blog/why-you-want-react-query) (TkDodo): the problems the hook layer solves for you
+- [React Query as a State Manager](https://tkdodo.eu/blog/react-query-as-a-state-manager) (TkDodo): why server data is never copied into useState or Zustand
+- [API layer](https://github.com/alan2207/bulletproof-react/blob/master/docs/api-layer.md) (Bulletproof React): the client → service → hook split, explained
+- [Thinking in React](https://react.dev/learn/thinking-in-react) (React): breaking a screen into components and deciding where state lives
+- [Application State Management with React](https://kentcdodds.com/blog/application-state-management-with-react) (Kent C. Dodds): server state vs UI state

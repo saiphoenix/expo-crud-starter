@@ -67,3 +67,12 @@ Screenshot:     (attached)
 ```
 
 AI assistants are welcome (see `claude.md` in the root), but **you must understand every line you commit**.
+
+## 📖 Further reading
+
+- [Debugging runtime issues](https://docs.expo.dev/debugging/runtime-issues/) (Expo): a step-by-step way to find the cause of a crash
+- [React Native DevTools](https://reactnative.dev/docs/react-native-devtools) (React Native): breakpoints, console and component inspection
+- [Dev tools plugins](https://docs.expo.dev/debugging/devtools-plugins/) (Expo): the React Query plugin opened with `shift + m`
+- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect) (React): the most common source of loops and stale data
+- [Fix the slow render before you fix the re-render](https://kentcdodds.com/blog/fix-the-slow-render-before-you-fix-the-re-render) (Kent C. Dodds): where to look first when a screen is slow
+- [The React Native Optimization Guide](https://www.callstack.com/ebooks/the-ultimate-guide-to-react-native-optimization) (Callstack): a free deep dive for later

@@ -99,3 +99,12 @@ Products CRUD — Update.
 |---|---|
 |  |  |
 ```
+
+## 📖 Further reading
+
+- [How to Write a Git Commit Message](https://cbea.ms/git-commit/) (Chris Beams): the seven rules of a good commit message
+- [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) (Conventional Commits): the `feat:` / `fix:` format commitlint checks
+- [Small CLs](https://google.github.io/eng-practices/review/developer/small-cls.html) (Google): why small PRs get reviewed faster and break less
+- [Writing good CL descriptions](https://google.github.io/eng-practices/review/developer/cl-descriptions.html) (Google): what to put in your PR description
+- [The standard of code review](https://google.github.io/eng-practices/review/reviewer/standard.html) (Google): what reviewers look for
+- [Why I don't use Prettier](https://antfu.me/posts/why-not-prettier) (Anthony Fu): why this repo formats with ESLint only

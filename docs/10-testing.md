@@ -94,3 +94,13 @@ Reusable steps (onboarding, login, hide keyboard) live in `.maestro/utils/`.
 - [ ] Service URLs tested
 - [ ] Key components tested (render + main interaction)
 - [ ] One Maestro flow for the main happy path (for big features)
+
+## 📖 Further reading
+
+- [Write tests. Not too many. Mostly integration.](https://kentcdodds.com/blog/write-tests) (Kent C. Dodds): what is worth testing
+- [Testing Implementation Details](https://kentcdodds.com/blog/testing-implementation-details) (Kent C. Dodds): why we test what the user sees
+- [Common mistakes with React Testing Library](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library) (Kent C. Dodds): the habits to avoid from day one
+- [How should I query?](https://callstack.github.io/react-native-testing-library/docs/guides/how-to-query) (React Native Testing Library): getBy vs queryBy vs findBy, by role and by text
+- [Testing React Query](https://tkdodo.eu/blog/testing-react-query) (TkDodo): testing components and hooks that fetch data
+- [Mock functions](https://jestjs.io/docs/mock-functions) (Jest): how `jest.fn()` and module mocks work (see `service.test.ts`)
+- [Writing your first flow](https://docs.maestro.dev/getting-started/writing-your-first-flow) (Maestro): end-to-end tests like `.maestro/products/`

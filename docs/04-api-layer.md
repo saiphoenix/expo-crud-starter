@@ -123,3 +123,12 @@ To add a new variable: add it to the schema **and** the `_env` object in `env.ts
 - [ ] One function in `service.ts` using `client`
 - [ ] A hook in `api.ts` (next doc)
 - [ ] A unit test for the service URL/params (see `service.test.ts`)
+
+## 📖 Further reading
+
+- [Interceptors](https://axios-http.com/docs/interceptors) (Axios): how the token and error handling in `client.tsx` work
+- [HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods) (MDN): GET, POST, PUT, PATCH and DELETE in detail
+- [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) (MDN): what 200, 201, 400, 401, 404 and 500 mean
+- [React Query Error Handling](https://tkdodo.eu/blog/react-query-error-handling) (TkDodo): where API errors should be shown to the user
+- [Web API design best practices](https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design) (Microsoft): how good REST endpoints are named and paginated
+- [Environment variables in Expo](https://docs.expo.dev/guides/environment-variables/) (Expo): why `EXPO_PUBLIC_` values are not secret

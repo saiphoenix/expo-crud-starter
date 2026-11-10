@@ -81,3 +81,11 @@ The full list lives in `package.json` → `"scripts"`.
 - [ ] You changed a text and saw it update instantly
 - [ ] `pnpm check-all` passes
 - [ ] You created a branch and made a commit (Husky ran the checks)
+
+## 📖 Further reading
+
+- [Expo Go vs Development Builds: which should you use?](https://expo.dev/blog/expo-go-vs-development-builds) (Expo blog): why this repo needs a development build, not Expo Go
+- [Introduction to development builds](https://docs.expo.dev/develop/development-builds/introduction/) (Expo): when you must rebuild and when a reload is enough
+- [Continuous Native Generation (prebuild)](https://docs.expo.dev/workflow/prebuild/) (Expo): where the `android/` and `ios/` folders come from
+- [Metro concepts](https://metrobundler.dev/docs/concepts) (Metro): what the bundler does and why `-c` fixes 'weird' bugs
+- [Motivation](https://pnpm.io/motivation) (pnpm): why we use pnpm instead of npm or yarn
