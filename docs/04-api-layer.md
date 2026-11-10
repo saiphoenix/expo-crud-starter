@@ -95,15 +95,17 @@ export type ProductInput = Pick<Product, 'title' | 'description' | 'category' | 
 | Update | `PUT` / `PATCH` | `/products/5` |
 | Delete | `DELETE` | `/products/5` |
 
-## 4.3 The practice API (DummyJSON)
+## 4.3 The practice APIs
 
-We learn against [dummyjson.com](https://dummyjson.com/docs/products). It's free, needs no key, and supports all CRUD calls.
+| | Local mock API (**default**) | DummyJSON (remote) |
+|---|---|---|
+| `.env` | `EXPO_PUBLIC_API_URL=http://localhost:3001/` | `EXPO_PUBLIC_API_URL=https://dummyjson.com/` |
+| Start | `pnpm mock:api` | nothing, it's online |
+| Create / Update / Delete | ✅ **really saved** to `mock-api/db.json` | ⚠️ simulated, nothing is saved |
 
-> ⚠️ **Create / update / delete are simulated.** The server answers as if it worked but doesn't save anything. So:
-> - a product you **create** won't appear in the list after refresh (and its detail page 404s),
-> - an **edit** shows on the detail screen (we cache the response) but the list shows the original after refetch.
->
-> That's expected — your code is correct. Switch `EXPO_PUBLIC_API_URL` to the real backend when it's ready.
+Both return the **same JSON shape**, so `service.ts` works with either. Only the base URL changes. See [16 · Mock API](./16-mock-api.md).
+
+> On DummyJSON, a product you create won't appear in the list (and its detail page 404s), and edits revert after a refetch. That's expected, not a bug in your code.
 
 ## 4.4 Environment variables
 

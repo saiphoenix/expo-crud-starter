@@ -45,12 +45,14 @@ pnpm start       # starts Metro (the JS bundler). Press a = Android, i = iOS, j 
 
 ## 1.3 The `.env` file
 
-The repo ships with a `.env` that points at the free practice API:
+The repo ships with a `.env` that points at the **local mock API**. It saves your CRUD changes into `mock-api/db.json`:
 
 ```bash
 EXPO_PUBLIC_APP_ENV=development
-EXPO_PUBLIC_API_URL=https://dummyjson.com/
+EXPO_PUBLIC_API_URL=http://localhost:3001/
 ```
+
+Start it in a **separate terminal** before the app: `pnpm mock:api`. Android emulator? Use `http://10.0.2.2:3001/`. Details and the remote DummyJSON option are in [16 · Mock API](./16-mock-api.md).
 
 Change `.env`? Restart Metro with a clean cache: `pnpm start -c`. Full details in [Environments & Builds](./12-environments-and-builds.md).
 
@@ -58,6 +60,8 @@ Change `.env`? Restart Metro with a clean cache: `pnpm start -c`. Full details i
 
 | Command | What it does |
 |---|---|
+| `pnpm mock:api` | Start the local JSON backend (keep it running in its own terminal) |
+| `pnpm mock:reset` | Restore `mock-api/db.json` to the original data |
 | `pnpm start` | Start Metro bundler |
 | `pnpm start -c` | Start Metro and clear its cache (fixes "weird" issues) |
 | `pnpm android` / `pnpm ios` | Build + install the dev client and run |

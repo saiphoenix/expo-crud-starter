@@ -17,7 +17,8 @@ Our team's React Native starter template — Expo + TypeScript + Expo Router + R
 git clone <this-repo-url> my-app
 cd my-app
 pnpm install
-pnpm android        # or: pnpm ios (macOS)
+pnpm mock:api       # terminal 1 — local JSON backend (keep running)
+pnpm android        # terminal 2 — or: pnpm ios (macOS)
 ```
 
 Then: Onboarding → Login (any email + 6-char password) → **Products** tab.
@@ -60,7 +61,14 @@ src/features/products/
 └── components/               # product-card, product-form (shared by create + edit)
 ```
 
-Practice API: [DummyJSON](https://dummyjson.com/docs/products) (writes are simulated — nothing is really saved).
+Backend for practice: a **local mock API** (`mock-api/`) that saves every create/update/delete into `mock-api/db.json`:
+
+```bash
+pnpm mock:api      # terminal 1 — http://localhost:3001
+pnpm start -c      # terminal 2 — the app
+```
+
+See [docs/16 · Mock API](./docs/16-mock-api.md). New here? Read [docs/17 · Research & Explore](./docs/17-research-and-explore.md) for every library used and what to study.
 
 ## 🛠 Stack
 

@@ -27,6 +27,8 @@ Read these in order during your first week. Each one is short.
 | 13 | [Recipe: Adding a New Feature](./13-adding-a-new-feature.md) | Step-by-step checklist to build any CRUD feature |
 | 14 | [Debugging & Common Mistakes](./14-debugging-and-common-mistakes.md) | How to fix things fast, what not to do |
 | 15 | [Glossary](./15-glossary.md) | Every term in plain English |
+| 16 | [Local Mock API](./16-mock-api.md) | Run a local JSON backend so Create/Update/Delete really save |
+| 17 | [Research & Explore Guide](./17-research-and-explore.md) | Every library in the repo: where it's used, what to research, docs links |
 
 ## The one diagram to remember
 
@@ -47,7 +49,7 @@ Read these in order during your first week. Each one is short.
  │ 1. CLIENT    src/lib/api/client.tsx                          │  base URL, token, global errors
  └───────────────┬──────────────────────────────────────────────┘
                  ▼
-              SERVER (https://dummyjson.com while learning)
+              SERVER (local mock API → mock-api/db.json)
 ```
 
 ## Where to find the reference code
@@ -70,4 +72,4 @@ Read these in order during your first week. Each one is short.
 - TanStack Query: https://tanstack.com/query/latest
 - TanStack Form: https://tanstack.com/form/latest
 - Zod: https://zod.dev
-- DummyJSON (practice API): https://dummyjson.com/docs
+- Local mock API: [16 · Mock API](./16-mock-api.md) · DummyJSON (remote practice API): https://dummyjson.com/docs

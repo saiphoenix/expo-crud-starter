@@ -19,7 +19,8 @@
 | Data doesn't update after create/update/delete | Missing `invalidateQueries`, or a hand-typed key that doesn't match |
 | Duplicate items in an infinite list | `fetchNextPage` without the `!isFetchingNextPage` guard |
 | `Cannot read property 'title' of undefined` | Used `data` before checking `isPending` / `isError` |
-| Created product not in list / 404 on its detail | DummyJSON doesn't really save — expected (see [API Layer](./04-api-layer.md#43-the-practice-api-dummyjson)) |
+| Created product not in list / 404 on its detail | You're on DummyJSON, which doesn't really save. Use the local mock API ([16 · Mock API](./16-mock-api.md)) |
+| `Network Error` / "No internet connection" on every screen | Mock API not running → `pnpm mock:api`. On Android emulator use `http://10.0.2.2:3001/`. Changed `.env`? → `pnpm start -c` |
 | Env var is `undefined` / validation warning | Not in `.env` **and** `env.ts`, or Metro not restarted with `-c` |
 | `requireNativeComponent` / "native module not found" | Native library added but dev client not rebuilt |
 | Commit blocked: "Direct commits to the main branch…" | You're on `main` — create a branch |

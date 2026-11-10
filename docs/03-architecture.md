@@ -31,7 +31,7 @@ What happens when the Products tab opens:
       client.get('/products', { params })                       ← Layer 2 → 1
 
 4. client request interceptor adds  Authorization: Bearer <token>
-      → GET https://dummyjson.com/products?skip=0&limit=20      ← Layer 1 → server
+      → GET http://localhost:3001/products?skip=0&limit=20     ← Layer 1 → server (mock-api)
 
 5. Response comes back
       • success → data flows back up: service → hook (cached) → screen re-renders
