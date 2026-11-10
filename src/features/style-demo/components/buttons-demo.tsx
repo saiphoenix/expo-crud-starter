@@ -34,6 +34,7 @@ export function Buttons() {
           <Button label="small" size="sm" disabled className="mr-2" />
         </View>
         <Button label="Default Button" />
+        <Button label="Primary Button" variant="primary" />
         <Button label="Secondary Button" variant="secondary" />
         <Button label="Outline Button" variant="outline" />
         <Button label="Destructive Button" variant="destructive" />

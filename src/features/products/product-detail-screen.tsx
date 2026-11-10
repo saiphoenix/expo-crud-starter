@@ -44,7 +44,7 @@ export function ProductDetailScreen() {
       <View className="flex-1 items-center justify-center p-6">
         <Stack.Screen options={{ title }} />
         <Text className="mb-2 text-center">{translate('products.error_loading')}</Text>
-        <Text className="mb-4 text-center text-sm text-neutral-500">{error.message}</Text>
+        <Text className="mb-4 text-center text-sm text-muted-foreground">{error.message}</Text>
         <Button label={translate('common.retry')} onPress={() => refetch()} />
       </View>
     );
@@ -73,15 +73,15 @@ export function ProductDetailScreen() {
       <FocusAwareStatusBar />
       <Image
         source={{ uri: product.thumbnail }}
-        className="h-64 w-full rounded-xl bg-neutral-100"
+        className="h-64 w-full rounded-xl bg-muted"
         contentFit="contain"
       />
       <Text testID="product-detail-title" className="mt-4 text-2xl font-bold">
         {product.title}
       </Text>
-      <Text className="text-neutral-500 capitalize">{product.category}</Text>
+      <Text className="capitalize text-muted-foreground">{product.category}</Text>
       <Text className="mt-2 text-xl font-semibold">{formatPrice(product.price)}</Text>
-      <Text className="mt-1 text-sm text-neutral-500">
+      <Text className="mt-1 text-sm text-muted-foreground">
         {translate('products.form.stock')}
         :
         {' '}

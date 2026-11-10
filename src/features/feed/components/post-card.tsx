@@ -19,7 +19,7 @@ export function PostCard({ title, body, id }: Props) {
   return (
     <Link href={`/feed/${id}`} asChild>
       <Pressable>
-        <View className="m-2 overflow-hidden rounded-xl border border-neutral-300 bg-white dark:bg-neutral-900">
+        <View className="m-2 overflow-hidden rounded-xl border border-border bg-card">
           <Image
             className="h-56 w-full overflow-hidden rounded-t-xl"
             contentFit="cover"
@@ -31,7 +31,7 @@ export function PostCard({ title, body, id }: Props) {
 
           <View className="p-2">
             <Text className="py-3 text-2xl">{title}</Text>
-            <Text numberOfLines={3} className="leading-snug text-gray-600">
+            <Text numberOfLines={3} className="leading-snug text-muted-foreground">
               {body}
             </Text>
           </View>

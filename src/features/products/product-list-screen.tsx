@@ -82,7 +82,7 @@ export function ProductListScreen() {
         ? (
             <View className="flex-1 items-center justify-center p-6">
               <Text className="mb-2 text-center">{translate('products.error_loading')}</Text>
-              <Text className="mb-4 text-center text-sm text-neutral-500">{error.message}</Text>
+              <Text className="mb-4 text-center text-sm text-muted-foreground">{error.message}</Text>
               <Button label={translate('common.retry')} onPress={() => refetch()} />
             </View>
           )
