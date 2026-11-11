@@ -4,6 +4,8 @@
 
 ## 1.1 Install the tools (once)
 
+> 📄 **New to all this?** Use the beginner PDF instead: [Windows](./android-setup-guide-windows.pdf) · [macOS](./android-setup-guide-mac.pdf). It walks through Android Studio, emulators, and ADB screen by screen.
+
 | Tool | Why | Check |
 |---|---|---|
 | **Node.js LTS** (20+) | Runs the JS tooling | `node -v` |

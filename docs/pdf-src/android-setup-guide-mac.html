@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Android Setup Guide – Expo CRUD Starter</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+  :root { --ink:#1b1f24; --muted:#5b6470; --line:#d8dee6; --accent:#1a6dd8; --code-bg:#f3f5f8; --warn:#fff6e0; --warn-line:#e7b93c; --ok:#eaf7ee; --ok-line:#3fa465; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.5; margin: 0; background:#fff; }
+  h1 { font-size: 24pt; margin: 0 0 4px; }
+  h2 { font-size: 15pt; margin: 26px 0 8px; padding-bottom: 4px; border-bottom: 2px solid var(--accent); break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 16px 0 6px; break-after: avoid; }
+  p { margin: 6px 0; }
+  ul, ol { margin: 6px 0; padding-left: 22px; }
+  li { margin: 3px 0; }
+  code { font-family: Menlo, Consolas, monospace; font-size: 9pt; background: var(--code-bg); padding: 1px 4px; border-radius: 3px; }
+  pre { font-family: Menlo, Consolas, monospace; font-size: 9pt; background: var(--code-bg); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 8px 10px; border-radius: 4px; white-space: pre-wrap; word-break: break-all; break-inside: avoid; margin: 6px 0 10px; }
+  pre code { background: none; padding: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 9.5pt; break-inside: auto; }
+  th, td { border: 1px solid var(--line); padding: 5px 7px; text-align: left; vertical-align: top; }
+  th { background: #eef2f7; }
+  tr { break-inside: avoid; }
+  .cover { padding: 40px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 10px; }
+  .sub { color: var(--muted); font-size: 11.5pt; }
+  .note { background: var(--warn); border-left: 4px solid var(--warn-line); padding: 8px 12px; border-radius: 4px; margin: 10px 0; break-inside: avoid; }
+  .ok { background: var(--ok); border-left: 4px solid var(--ok-line); padding: 8px 12px; border-radius: 4px; margin: 10px 0; break-inside: avoid; }
+  .toc ol { columns: 2; column-gap: 30px; }
+  .page-break { break-before: page; }
+  .diagram { font-family: Menlo, monospace; font-size: 8.8pt; background:#fafbfc; border:1px dashed var(--line); padding:10px; white-space: pre; break-inside: avoid; }
+  .step { display:inline-block; background: var(--accent); color:#fff; border-radius: 10px; padding: 0 8px; font-size: 9pt; font-weight: 600; margin-right: 6px; }
+  .click { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>Android Setup Guide</h1>
+  <div class="sub">Expo CRUD Starter: from a fresh Mac to the app running on an Android emulator</div>
+  <p style="margin-top:14px">Written for people with no previous React Native or Android experience. Follow the parts in order. Each grey box is a command you can copy into <b>Terminal</b> (press <code>Cmd + Space</code>, type <i>Terminal</i>, press Enter).</p>
+  <p><b>Platform:</b> macOS (Apple Silicon or Intel). &nbsp; <b>Time:</b> about 1–2 hours the first time, mostly downloads.</p>
+</div>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <ol>
+    <li>Why we need Android Studio (native modules)</li>
+    <li>What you need before starting</li>
+    <li>System setup: install the tools</li>
+    <li>Android Studio: first-time setup wizard</li>
+    <li>Android Studio: SDK Manager (what to tick)</li>
+    <li>Environment variables (JAVA_HOME, ANDROID_HOME)</li>
+    <li>Create an emulator (virtual phone)</li>
+    <li>ADB: connecting emulators and real phones</li>
+    <li>Run the application</li>
+    <li>Daily workflow</li>
+    <li>Troubleshooting</li>
+    <li>Quick checklist</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<h2>1. Why we need Android Studio (native modules)</h2>
+
+<p>Many Expo tutorials say "install the <b>Expo Go</b> app on your phone and scan a QR code". <b>That does not work for this project.</b></p>
+
+<h3>What is a native module?</h3>
+<p>A React Native app has two layers:</p>
+<ul>
+  <li><b>JavaScript/TypeScript layer:</b> our screens, logic and styling (everything in <code>src/</code>).</li>
+  <li><b>Native layer:</b> real Android (Kotlin/Java/C++) code compiled into the app. Libraries that need phone features or very high speed ship their own native code. These are called <b>native modules</b>.</li>
+</ul>
+
+<p>This project uses several libraries with native code, for example:</p>
+<table>
+  <tr><th>Library</th><th>What it does in our app</th></tr>
+  <tr><td><code>react-native-mmkv</code> + <code>react-native-nitro-modules</code></td><td>Fast, encrypted local storage (login token, theme, language)</td></tr>
+  <tr><td><code>react-native-reanimated</code> + <code>react-native-worklets</code></td><td>Smooth animations</td></tr>
+  <tr><td><code>react-native-keyboard-controller</code></td><td>Keyboard handling on forms</td></tr>
+  <tr><td><code>react-native-gesture-handler</code>, <code>@gorhom/bottom-sheet</code></td><td>Swipes and bottom sheets</td></tr>
+  <tr><td><code>react-native-restart</code></td><td>Restarts the app after changing language</td></tr>
+  <tr><td><code>expo-dev-client</code></td><td>Turns our app into a "development build" with a developer menu</td></tr>
+</table>
+
+<h3>Why Expo Go is not enough</h3>
+<p>Expo Go is a ready-made app from the store. It only contains a <b>fixed set</b> of native modules chosen by Expo. Libraries like <b>MMKV / Nitro Modules</b> and <b>react-native-restart</b> are not inside it. If you open our project in Expo Go, it crashes with errors such as:</p>
+<pre>Error: NitroModules are not supported in Expo Go!
+Invariant Violation: TurboModuleRegistry.getEnforcing(...): 'xyz' could not be found</pre>
+
+<h3>The solution: a development build</h3>
+<p>We compile <b>our own</b> version of the app on our computer. It contains every native module we use. This is called a <b>development build</b>. Compiling an Android app needs:</p>
+<ul>
+  <li><b>JDK 17:</b> Java, used by the Android build tool (Gradle)</li>
+  <li><b>Android SDK:</b> Android libraries and build tools</li>
+  <li><b>An emulator or a real phone</b> to install the app on</li>
+</ul>
+<p><b>Android Studio</b> is the easiest way to install the Android SDK and the emulator. We don't write code in Android Studio. We only use it for setup and to start the emulator.</p>
+
+<div class="diagram">  pnpm android
+      │
+      ├─ 1. Expo generates the  android/  folder (native project)
+      ├─ 2. Gradle + JDK 17 + Android SDK compile it  →  app-debug.apk   (slow, first time 5–15 min)
+      ├─ 3. ADB installs the APK on the emulator / phone
+      └─ 4. Metro bundler serves our JavaScript  →  app opens          (fast, every time)
+
+  Later, JS/TS changes  →  only step 4 (instant Fast Refresh)
+  New native library or app.config.ts change  →  run  pnpm android  again</div>
+
+<!-- ============================================================ -->
+<h2>2. What you need before starting</h2>
+<table>
+  <tr><th>Item</th><th>Requirement</th></tr>
+  <tr><td>Computer</td><td>Mac with macOS 13 or newer (Apple Silicon M1/M2/M3/M4 recommended)</td></tr>
+  <tr><td>Memory (RAM)</td><td>8 GB minimum, <b>16 GB recommended</b> (the emulator uses a lot)</td></tr>
+  <tr><td>Free disk space</td><td><b>At least 30 GB</b> (Android SDK + emulator image + project)</td></tr>
+  <tr><td>Internet</td><td>Stable connection. Several GB of downloads the first time.</td></tr>
+  <tr><td>Access</td><td>Your Mac admin password and access to the GitHub repository</td></tr>
+  <tr><td>Expo account</td><td><b>Not needed</b> to run the app locally</td></tr>
+</table>
+<p>To check whether your Mac is Apple Silicon or Intel, click <span class="click"> Apple menu → About This Mac</span>. <b>Chip: Apple M…</b> means Apple Silicon. <b>Processor: Intel…</b> means Intel.</p>
+
+<!-- ============================================================ -->
+<h2 class="page-break">3. System setup: install the tools</h2>
+
+<h3><span class="step">3.1</span>Install Homebrew (the Mac package installer)</h3>
+<pre>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</pre>
+<p>When it asks for your password, type your Mac login password and press Enter. <b>Nothing appears while you type. This is normal.</b></p>
+<p>At the end, Homebrew prints <b>"Next steps"</b>. Run those lines. On Apple Silicon they are:</p>
+<pre>echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' &gt;&gt; ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"</pre>
+<p>Check:</p>
+<pre>brew -v</pre>
+
+<h3><span class="step">3.2</span>Install Node.js, Watchman, Git, Java 17 and Android Studio</h3>
+<pre>brew install node watchman git
+brew install --cask zulu@17 android-studio</pre>
+<ul>
+  <li><b>node:</b> runs JavaScript tools (version 20 or newer is required)</li>
+  <li><b>watchman:</b> watches files so the app reloads when you save</li>
+  <li><b>zulu@17:</b> Java Development Kit 17, needed by Android builds. <b>Use 17, not newer.</b></li>
+  <li><b>android-studio:</b> installs the Android Studio app into Applications</li>
+</ul>
+
+<h3><span class="step">3.3</span>Install pnpm (our package manager)</h3>
+<pre>npm install -g pnpm</pre>
+<div class="note"><b>Important:</b> this project <b>only</b> works with <code>pnpm</code>. <code>npm install</code> and <code>yarn</code> are blocked on purpose.</div>
+
+<h3><span class="step">3.4</span>Check the versions</h3>
+<pre>node -v
+pnpm -v
+java -version
+git --version</pre>
+<p>Expected: Node <b>v20</b> or higher, pnpm <b>10.x</b>, Java <b>"17.x"</b>. If <code>java -version</code> shows a different version, finish Part 6 first, then check again.</p>
+
+<!-- ============================================================ -->
+<h2 class="page-break">4. Android Studio: first-time setup wizard</h2>
+
+<p>Open <span class="click">Applications → Android Studio</span>. If macOS asks <i>"Are you sure you want to open it?"</i>, click <span class="click">Open</span>.</p>
+
+<table>
+  <tr><th style="width:32%">Screen you see</th><th>What to select</th></tr>
+  <tr><td>Import Android Studio Settings</td><td><span class="click">Do not import settings</span> → OK</td></tr>
+  <tr><td>Help improve Android Studio (data sharing)</td><td>Your choice: <span class="click">Don't send</span> is fine</td></tr>
+  <tr><td>Welcome</td><td><span class="click">Next</span></td></tr>
+  <tr><td>Install Type</td><td><span class="click">Standard</span> → Next</td></tr>
+  <tr><td>Select UI Theme</td><td>Any (Darcula / Light) → Next</td></tr>
+  <tr><td>Verify Settings</td><td>Check that it lists <b>Android SDK</b>, <b>Android SDK Platform</b>, <b>Android Emulator</b> and <b>Performance (Android Emulator hypervisor)</b> → Next</td></tr>
+  <tr><td>License Agreement</td><td>Click <b>each</b> item on the left (e.g. <i>android-sdk-license</i>, <i>android-sdk-preview-license</i>) and choose <span class="click">Accept</span> for every one → Finish</td></tr>
+  <tr><td>Downloading Components</td><td>Wait. This can take 10–30 minutes. Then click <span class="click">Finish</span>.</td></tr>
+</table>
+
+<div class="ok">The SDK is installed in <code>~/Library/Android/sdk</code> (i.e. <code>/Users/&lt;your-name&gt;/Library/Android/sdk</code>). We'll use this path in Part 6.</div>
+
+<div class="note">If the wizard does not appear, or you skipped it by mistake, open Android Studio and go to <span class="click">More Actions → SDK Manager</span> and follow Part 5.</div>
+
+<!-- ============================================================ -->
+<h2>5. Android Studio: SDK Manager (what to tick)</h2>
+
+<p>On the Android Studio welcome screen, click <span class="click">More Actions → SDK Manager</span>. If a project is open, use <span class="click">Android Studio → Settings → Languages &amp; Frameworks → Android SDK</span> instead.</p>
+
+<h3>Tab 1: SDK Platforms</h3>
+<p>Tick <span class="click">Show Package Details</span> (bottom right), then expand <b>Android 16.0 ("Baklava") – API Level 36</b> and tick:</p>
+<ul>
+  <li>☑ <b>Android SDK Platform 36</b></li>
+  <li>☑ <b>Google Play ARM 64 v8a System Image</b> (Apple Silicon Macs)<br>or ☑ <b>Google Play Intel x86_64 Atom System Image</b> (Intel Macs)</li>
+</ul>
+<p style="color:var(--muted)">Expo SDK 54 builds against API 36. If you need to test older Android versions, you can install additional system images later.</p>
+
+<h3>Tab 2: SDK Tools</h3>
+<p>Tick <span class="click">Show Package Details</span> and make sure these are ticked:</p>
+<ul>
+  <li>☑ <b>Android SDK Build-Tools</b> → expand and tick <b>36.0.0</b></li>
+  <li>☑ <b>Android SDK Command-line Tools (latest)</b></li>
+  <li>☑ <b>Android Emulator</b></li>
+  <li>☑ <b>Android SDK Platform-Tools</b> (this contains <code>adb</code>)</li>
+  <li>☐ NDK (Side by side) and CMake are <b>optional</b>. The build downloads the right versions automatically when needed.</li>
+</ul>
+<p>Click <span class="click">Apply → OK</span>, accept the licenses, and wait for the download to finish.</p>
+
+<!-- ============================================================ -->
+<h2 class="page-break">6. Environment variables (JAVA_HOME, ANDROID_HOME)</h2>
+<p>Terminal needs to know where Java and the Android SDK are. Copy this block <b>exactly once</b>:</p>
+<pre>cat &gt;&gt; ~/.zshrc &lt;&lt;'EOF'
+
+# ---- React Native / Android ----
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools
+EOF
+source ~/.zshrc</pre>
+
+<p>Now <b>close Terminal completely (Cmd + Q)</b> and open it again. Then check:</p>
+<pre>echo $JAVA_HOME
+echo $ANDROID_HOME
+java -version
+adb --version
+emulator -version</pre>
+<p>All five commands should print something. None of them should say <code>command not found</code>.</p>
+<div class="note">If <code>echo $JAVA_HOME</code> works but <code>java -version</code> shows the wrong version, list your installed JDKs with <code>/usr/libexec/java_home -V</code> and make sure <code>zulu-17.jdk</code> is in the list.</div>
+
+<!-- ============================================================ -->
+<h2>7. Create an emulator (virtual phone)</h2>
+
+<ol>
+  <li>Open Android Studio. On the welcome screen click <span class="click">More Actions → Virtual Device Manager</span>.</li>
+  <li>Click <span class="click">+ (Create Virtual Device)</span>.</li>
+  <li><b>Select Hardware:</b> category <span class="click">Phone</span> → choose <span class="click">Pixel 8</span> (any recent Pixel is fine). Prefer devices with the <b>Play Store</b> icon → <span class="click">Next</span>.</li>
+  <li><b>System Image:</b> choose <b>API 36</b> (<i>Baklava / Android 16</i>), <b>Google Play</b>, with ABI:
+    <ul>
+      <li><b>arm64-v8a</b> on Apple Silicon Macs</li>
+      <li><b>x86_64</b> on Intel Macs</li>
+    </ul>
+    If a download icon ⬇ appears next to it, click it and wait. Then click <span class="click">Next</span>.</li>
+  <li><b>Verify Configuration:</b>
+    <ul>
+      <li>AVD Name: keep the default, e.g. <code>Pixel_8</code> (no spaces is easiest)</li>
+      <li>Startup orientation: Portrait</li>
+      <li>Click <span class="click">Show Advanced Settings</span> (in newer versions this is the <i>Additional settings</i> tab):
+        <ul>
+          <li>Graphics: <b>Hardware</b> (or <i>Automatic</i>)</li>
+          <li>RAM: <b>4096 MB</b> if your Mac has 16 GB, otherwise <b>2048 MB</b></li>
+          <li>Internal Storage: <b>8 GB</b> or more (our debug app is large)</li>
+        </ul>
+      </li>
+    </ul>
+    Click <span class="click">Finish</span>.</li>
+  <li>In the Device Manager list, click <span class="click">▶ (Play)</span> next to your device. A phone window opens and boots Android. The first boot can take 1–3 minutes.</li>
+</ol>
+
+<h3>Start the emulator from Terminal (optional, faster)</h3>
+<pre>emulator -list-avds          # shows your emulator names, e.g. Pixel_8
+emulator -avd Pixel_8        # starts it (keep this Terminal tab open)</pre>
+<p>If the emulator acts strangely, use a cold boot: <code>emulator -avd Pixel_8 -no-snapshot-load</code></p>
+
+<!-- ============================================================ -->
+<h2 class="page-break">8. ADB: connecting emulators and real phones</h2>
+
+<p><b>ADB (Android Debug Bridge)</b> is the tool that lets your Mac talk to an Android device. It installs the app and forwards network ports. It comes with <i>Android SDK Platform-Tools</i>.</p>
+
+<h3>8.1 Check connected devices</h3>
+<p>With the emulator running:</p>
+<pre>adb devices</pre>
+<p>Expected output:</p>
+<pre>List of devices attached
+emulator-5554   device</pre>
+
+<table>
+  <tr><th>Status shown</th><th>Meaning</th><th>Fix</th></tr>
+  <tr><td><code>device</code></td><td>Connected and ready ✅</td><td>Nothing to fix</td></tr>
+  <tr><td><i>(empty list)</i></td><td>No device found</td><td>Start the emulator, or plug in your phone and enable USB debugging (8.3)</td></tr>
+  <tr><td><code>offline</code></td><td>Device is still booting or stuck</td><td>Wait 30 seconds, or run the restart commands in 8.2</td></tr>
+  <tr><td><code>unauthorized</code></td><td>Phone hasn't trusted this Mac</td><td>Unlock the phone and tap <b>Allow</b> on the "Allow USB debugging?" popup</td></tr>
+</table>
+
+<h3>8.2 Restart ADB (fixes most connection problems)</h3>
+<pre>adb kill-server
+adb start-server
+adb devices</pre>
+
+<h3>8.3 Use a real Android phone instead of an emulator (USB)</h3>
+<ol>
+  <li>On the phone, open <span class="click">Settings → About phone</span> and tap <b>Build number</b> <b>7 times</b>. You'll see <i>"You are now a developer"</i>.</li>
+  <li>Go to <span class="click">Settings → System → Developer options</span> and turn on <b>USB debugging</b>.</li>
+  <li>Connect the phone to the Mac with a <b>data</b> USB cable. Some cables only charge.</li>
+  <li>On the phone, tap <b>Allow</b> (tick <i>Always allow from this computer</i>).</li>
+  <li>Run <code>adb devices</code>. Your phone's serial number should appear with status <code>device</code>.</li>
+  <li>Let the phone reach the local mock API through the USB cable:
+<pre>adb reverse tcp:3001 tcp:3001     # mock API
+adb reverse tcp:8081 tcp:8081     # Metro bundler (Expo usually does this automatically)</pre>
+  With <code>adb reverse</code>, the phone can use <code>http://localhost:3001/</code> in <code>.env</code>. Run these again each time you reconnect the cable.</li>
+</ol>
+
+<h3>8.4 Wireless debugging (Android 11+, optional)</h3>
+<p>Phone and Mac must be on the same Wi-Fi. On the phone, open <span class="click">Developer options → Wireless debugging → Pair device with pairing code</span>. Then on the Mac:</p>
+<pre>adb pair &lt;ip&gt;:&lt;pairing-port&gt;      # enter the 6-digit code shown on the phone
+adb connect &lt;ip&gt;:&lt;port&gt;           # the IP:port shown on the Wireless debugging screen
+adb devices</pre>
+
+<h3>8.5 Several devices connected?</h3>
+<p>If <code>adb devices</code> lists more than one device, <code>pnpm android</code> asks which one to use. You can also pick one directly:</p>
+<pre>pnpm android --device</pre>
+
+<!-- ============================================================ -->
+<h2 class="page-break">9. Run the application</h2>
+
+<h3><span class="step">9.1</span>Get the code</h3>
+<pre>cd ~/Desktop
+git clone https://github.com/saiphoenix/expo-crud-starter.git
+cd expo-crud-starter</pre>
+<p>If GitHub asks you to log in, ask the repository owner to add you as a collaborator first.</p>
+
+<h3><span class="step">9.2</span>Install dependencies (the first command after cloning)</h3>
+<pre>pnpm install</pre>
+<p>This downloads all libraries into <code>node_modules/</code> and takes a few minutes.</p>
+
+<h3><span class="step">9.3</span>Set the API address in <code>.env</code></h3>
+<p>The project includes a <code>.env</code> file that points to a local fake backend (the <b>mock API</b>). An Android emulator can't reach your Mac at <code>localhost</code>. It uses the special address <b>10.0.2.2</b> instead.</p>
+<table>
+  <tr><th>Where the app runs</th><th><code>EXPO_PUBLIC_API_URL</code> in <code>.env</code></th></tr>
+  <tr><td>Android <b>emulator</b></td><td><code>http://10.0.2.2:3001/</code></td></tr>
+  <tr><td>Real phone over USB with <code>adb reverse</code> (8.3)</td><td><code>http://localhost:3001/</code></td></tr>
+  <tr><td>Real phone over Wi-Fi</td><td><code>http://&lt;your-Mac-IP&gt;:3001/</code> (find the IP with <code>ipconfig getifaddr en0</code>)</td></tr>
+  <tr><td>Remote demo API (no local backend)</td><td><code>https://dummyjson.com/</code></td></tr>
+</table>
+<p>For the emulator, run:</p>
+<pre>sed -i '' 's#localhost:3001#10.0.2.2:3001#' .env
+cat .env</pre>
+<p>You should see <code>EXPO_PUBLIC_API_URL=http://10.0.2.2:3001/</code>.</p>
+
+<h3><span class="step">9.4</span>Start the mock API (Terminal tab 1, keep it open)</h3>
+<pre>pnpm mock:api</pre>
+<p>Expected: <code>🚀 Mock API on http://localhost:3001</code>. Every product you create, edit or delete is saved in <code>mock-api/db.json</code>.</p>
+
+<h3><span class="step">9.5</span>Start the emulator</h3>
+<p>Start it from Android Studio (Part 7, step 6) or with <code>emulator -avd Pixel_8</code>. Confirm with <code>adb devices</code>.</p>
+
+<h3><span class="step">9.6</span>Build and run the app (Terminal tab 2)</h3>
+<p>Press <code>Cmd + T</code> to open a new Terminal tab, then run:</p>
+<pre>cd ~/Desktop/expo-crud-starter
+pnpm android</pre>
+<p>What happens:</p>
+<ol>
+  <li>Expo creates the <code>android/</code> folder. This is generated code; never edit it by hand.</li>
+  <li>Gradle compiles the native app. <b>The first time takes 5–15 minutes</b> and downloads a lot. Later builds are much faster.</li>
+  <li>The app is installed on the emulator and opens automatically.</li>
+  <li>Metro (the JavaScript bundler) keeps running in this tab. Leave it open.</li>
+</ol>
+
+<h3><span class="step">9.7</span>Use the app</h3>
+<ol>
+  <li>Onboarding screen → tap <b>Let's Get Started</b></li>
+  <li>Login → this is a demo login. Use <b>any email</b> and <b>any 6-character password</b>, e.g. <code>test@test.com</code> / <code>123456</code></li>
+  <li>Tabs: <b>Feed</b> (template example), <b>Products</b> (our CRUD reference), <b>Style</b> (UI kit), <b>Settings</b></li>
+</ol>
+
+<div class="ok"><b>Done!</b> Change any text in <code>src/</code> and save. The app updates instantly (Fast Refresh).</div>
+
+<!-- ============================================================ -->
+<h2>10. Daily workflow (after the first build)</h2>
+<p>You do <b>not</b> need to run <code>pnpm android</code> every day. Use:</p>
+<pre># Tab 1 – backend
+cd ~/Desktop/expo-crud-starter &amp;&amp; pnpm mock:api
+
+# Tab 2 – start the emulator first, then:
+cd ~/Desktop/expo-crud-starter &amp;&amp; pnpm start -c
+#   then press  a  to open the app on Android</pre>
+
+<table>
+  <tr><th>When…</th><th>Run</th></tr>
+  <tr><td>You only changed JS/TS code</td><td>Nothing. Fast Refresh updates the app.</td></tr>
+  <tr><td>You changed <code>.env</code></td><td>Stop Metro (Ctrl + C) → <code>pnpm start -c</code></td></tr>
+  <tr><td>You pulled new code with new packages</td><td><code>pnpm install</code></td></tr>
+  <tr><td>A <b>native</b> library was added, or <code>app.config.ts</code> changed</td><td><code>pnpm install</code> → <code>pnpm android</code> (rebuild)</td></tr>
+  <tr><td>Open the developer menu in the app</td><td>Press <code>m</code> in the Metro terminal, or <code>Cmd + M</code> in the emulator</td></tr>
+  <tr><td>Reload the app</td><td>Press <code>r</code> in the Metro terminal</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 class="page-break">11. Troubleshooting</h2>
+<table>
+  <tr><th style="width:38%">Problem / error message</th><th>Fix</th></tr>
+  <tr><td><code>command not found: pnpm / adb / emulator / java</code></td><td>Redo Part 6, then quit and reopen Terminal.</td></tr>
+  <tr><td><code>NitroModules are not supported in Expo Go</code> or <i>"native module could not be found"</i></td><td>You opened the project in <b>Expo Go</b>. Uninstall Expo Go from the emulator, then run <code>pnpm android</code> to install our development build (Part 1).</td></tr>
+  <tr><td><code>SDK location not found. Define ANDROID_HOME…</code></td><td>Redo Part 6. Check that <code>echo $ANDROID_HOME</code> prints a path that exists.</td></tr>
+  <tr><td><code>Unsupported class file major version</code> / Java version errors</td><td>The wrong Java version is in use. Make sure <code>java -version</code> shows <b>17</b> (Part 6).</td></tr>
+  <tr><td><code>No Android connected device found</code></td><td>Start the emulator and check <code>adb devices</code> (Part 8). If needed, run <code>adb kill-server &amp;&amp; adb start-server</code>.</td></tr>
+  <tr><td><code>INSTALL_FAILED_INSUFFICIENT_STORAGE</code></td><td>Device Manager → ⋮ next to the emulator → <b>Wipe Data</b>, or increase Internal Storage (Part 7).</td></tr>
+  <tr><td>Products tab shows <b>Network Error</b></td><td>Check that <code>pnpm mock:api</code> is running, that <code>.env</code> uses <code>10.0.2.2</code> (emulator), then restart with <code>pnpm start -c</code>.</td></tr>
+  <tr><td>Red screen: <i>"Unable to load script"</i></td><td>Metro isn't running. Run <code>pnpm start</code> and press <code>a</code>. On a real phone, run <code>adb reverse tcp:8081 tcp:8081</code>.</td></tr>
+  <tr><td><code>Port 8081 already in use</code></td><td><code>lsof -ti:8081 | xargs kill -9</code> then try again</td></tr>
+  <tr><td>Gradle build fails with strange errors</td><td>Clean and rebuild:<br><code>cd android &amp;&amp; ./gradlew clean &amp;&amp; cd ..</code><br><code>pnpm android</code><br>If it still fails: <code>rm -rf android</code> then <code>pnpm android</code>. The folder is regenerated.</td></tr>
+  <tr><td>Old screens or weird behaviour after a change</td><td>Stop Metro → <code>pnpm start -c</code> (clears the cache)</td></tr>
+  <tr><td><code>pnpm install</code> fails with <b>401 Unauthorized</b></td><td>Your Mac points to a private package registry. Run:<br><code>npm config set registry https://registry.npmjs.org/</code> and try again.</td></tr>
+  <tr><td><i>"Use pnpm instead"</i> / <code>only-allow</code> error</td><td>You ran <code>npm install</code> or <code>yarn</code>. Use <code>pnpm install</code>.</td></tr>
+  <tr><td>Emulator is very slow or black screen</td><td>Use an <b>arm64</b> image on Apple Silicon, set Graphics to <b>Hardware</b>, close other heavy apps, or cold boot: <code>emulator -avd Pixel_8 -no-snapshot-load</code></td></tr>
+  <tr><td>Still stuck?</td><td>Run <code>pnpm doctor</code> and share the output and the full error with the team.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2>12. Quick checklist</h2>
+<table>
+  <tr><th style="width:6%">✓</th><th>Step</th><th>Check with</th></tr>
+  <tr><td>☐</td><td>Homebrew, Node, Watchman, Git, JDK 17, pnpm installed</td><td><code>node -v &amp;&amp; pnpm -v &amp;&amp; java -version</code></td></tr>
+  <tr><td>☐</td><td>Android Studio setup wizard finished (Standard)</td><td><code>ls ~/Library/Android/sdk</code></td></tr>
+  <tr><td>☐</td><td>SDK Platform 36, Build-Tools 36, Platform-Tools, Emulator, Command-line Tools</td><td>SDK Manager</td></tr>
+  <tr><td>☐</td><td>JAVA_HOME and ANDROID_HOME set in <code>~/.zshrc</code></td><td><code>echo $ANDROID_HOME</code></td></tr>
+  <tr><td>☐</td><td>Emulator created and booted</td><td><code>adb devices</code> → <code>device</code></td></tr>
+  <tr><td>☐</td><td>Repo cloned and <code>pnpm install</code> done</td><td><code>node_modules/</code> exists</td></tr>
+  <tr><td>☐</td><td><code>.env</code> → <code>http://10.0.2.2:3001/</code></td><td><code>cat .env</code></td></tr>
+  <tr><td>☐</td><td>Mock API running</td><td><code>pnpm mock:api</code></td></tr>
+  <tr><td>☐</td><td>App built and opened</td><td><code>pnpm android</code></td></tr>
+  <tr><td>☐</td><td>Logged in and Products tab loads</td><td>In the app</td></tr>
+</table>
+
+<p style="color:var(--muted); margin-top:18px">More details in the repository: <code>docs/01-getting-started.md</code>, <code>docs/12-environments-and-builds.md</code>, <code>docs/14-debugging-and-common-mistakes.md</code>, <code>docs/16-mock-api.md</code>.</p>
+
+</body>
+</html>

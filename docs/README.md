@@ -6,6 +6,15 @@ This repo is our **team starter template**. It is based on the [Obytes React Nat
 
 > 🧭 **Golden rule:** when you're unsure how to do something, open `src/features/products/` and copy the pattern.
 
+## 🖥️ First-time machine setup (PDF)
+
+Never set up React Native before? Follow the step-by-step PDF for your computer first. It covers Android Studio, the SDK Manager, emulators, ADB, environment variables, and running the app:
+
+- **Windows:** [android-setup-guide-windows.pdf](./android-setup-guide-windows.pdf)
+- **macOS:** [android-setup-guide-mac.pdf](./android-setup-guide-mac.pdf)
+
+The HTML sources are in [`pdf-src/`](./pdf-src/). After editing one, regenerate the PDF by opening it in Chrome and choosing **Print → Save as PDF**.
+
 ## Reading order
 
 Read these in order during your first week. Each one is short.

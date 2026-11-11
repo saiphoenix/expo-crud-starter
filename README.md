@@ -11,15 +11,30 @@ Our team's React Native starter template — Expo + TypeScript + Expo Router + R
 
 ---
 
+## 🖥️ First time? Set up your computer first
+
+This app uses **native modules** (MMKV, Reanimated, keyboard-controller…) that are **not in Expo Go**, so you must build it yourself with Android Studio. If you've never done that, follow the step-by-step PDF for your computer **before** the quick start:
+
+| Your computer | Guide |
+|---|---|
+| 🪟 **Windows** | [docs/android-setup-guide-windows.pdf](./docs/android-setup-guide-windows.pdf) |
+| 🍎 **macOS** | [docs/android-setup-guide-mac.pdf](./docs/android-setup-guide-mac.pdf) |
+
+The guides cover installing the tools, Android Studio and the SDK Manager (what to tick), environment variables, creating an emulator, ADB (emulators and real phones), running the app, and troubleshooting.
+
+> No Expo account is needed to run the app locally.
+
 ## 🚀 Quick start
 
 ```bash
-git clone <this-repo-url> my-app
-cd my-app
+git clone https://github.com/saiphoenix/expo-crud-starter.git
+cd expo-crud-starter
 pnpm install
 pnpm mock:api       # terminal 1 — local JSON backend (keep running)
-pnpm android        # terminal 2 — or: pnpm ios (macOS)
+pnpm android        # terminal 2 — or: pnpm ios (macOS only)
 ```
+
+> **Android emulator:** set `EXPO_PUBLIC_API_URL=http://10.0.2.2:3001/` in `.env` (the emulator can't reach `localhost`). See [docs/16 · Mock API](./docs/16-mock-api.md).
 
 Then: Onboarding → Login (any email + 6-char password) → **Products** tab.
 
@@ -29,6 +44,7 @@ New here? **Start with [`docs/README.md`](./docs/README.md)** and read docs 1–
 
 | | |
 |---|---|
+| [Setup PDF: Windows](./docs/android-setup-guide-windows.pdf) · [macOS](./docs/android-setup-guide-mac.pdf) | Beginner machine setup: Android Studio, emulator, ADB, first run |
 | [Getting Started](./docs/01-getting-started.md) | Install, run, daily commands |
 | [Project Structure](./docs/02-project-structure.md) | Every folder explained, naming + import rules |
 | [Architecture & Data Flow](./docs/03-architecture.md) | Screen → Hook → Service → Client |
