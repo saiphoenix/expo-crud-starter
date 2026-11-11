@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Android Setup Guide (Windows)</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+  :root { --ink:#1b1f24; --muted:#5b6470; --line:#d8dee6; --accent:#1a6dd8; --code-bg:#f3f5f8; --warn:#fff6e0; --warn-line:#e7b93c; --ok:#eaf7ee; --ok-line:#3fa465; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.5; margin: 0; background:#fff; }
+  h1 { font-size: 24pt; margin: 0 0 4px; }
+  h2 { font-size: 15pt; margin: 26px 0 8px; padding-bottom: 4px; border-bottom: 2px solid var(--accent); break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 16px 0 6px; break-after: avoid; }
+  p { margin: 6px 0; }
+  ul, ol { margin: 6px 0; padding-left: 22px; }
+  li { margin: 3px 0; }
+  code { font-family: Consolas, Menlo, monospace; font-size: 9pt; background: var(--code-bg); padding: 1px 4px; border-radius: 3px; }
+  pre { font-family: Consolas, Menlo, monospace; font-size: 9pt; background: var(--code-bg); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 8px 10px; border-radius: 4px; white-space: pre-wrap; word-break: break-all; break-inside: avoid; margin: 6px 0 10px; }
+  pre code { background: none; padding: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 9.5pt; }
+  th, td { border: 1px solid var(--line); padding: 5px 7px; text-align: left; vertical-align: top; }
+  th { background: #eef2f7; }
+  tr { break-inside: avoid; }
+  .cover { padding: 40px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 10px; }
+  .sub { color: var(--muted); font-size: 11.5pt; }
+  .note { background: var(--warn); border-left: 4px solid var(--warn-line); padding: 8px 12px; border-radius: 4px; margin: 10px 0; break-inside: avoid; }
+  .ok { background: var(--ok); border-left: 4px solid var(--ok-line); padding: 8px 12px; border-radius: 4px; margin: 10px 0; break-inside: avoid; }
+  .toc ol { columns: 2; column-gap: 30px; }
+  .page-break { break-before: page; }
+  .diagram { font-family: Consolas, Menlo, monospace; font-size: 8.8pt; background:#fafbfc; border:1px dashed var(--line); padding:10px; white-space: pre; break-inside: avoid; }
+  .step { display:inline-block; background: var(--accent); color:#fff; border-radius: 10px; padding: 0 8px; font-size: 9pt; font-weight: 600; margin-right: 6px; }
+  .click { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>Android Setup Guide (Windows)</h1>
+  <div class="sub">Expo CRUD Starter: from a fresh Windows PC to the app running on an Android emulator</div>
+  <p style="margin-top:14px">Written for people with no previous React Native or Android experience. Follow the parts in order. Each grey box is a command you can copy into <b>PowerShell</b>.</p>
+  <p><b>How to open PowerShell:</b> press the <b>Windows key</b>, type <i>PowerShell</i>, press Enter. When a step says <b>"as Administrator"</b>, right-click <i>Windows PowerShell</i> and choose <span class="click">Run as administrator</span>.</p>
+  <p><b>Platform:</b> Windows 10 (64-bit, version 1809 or newer) or Windows 11. &nbsp; <b>Time:</b> about 1–2 hours the first time, mostly downloads.</p>
+</div>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <ol>
+    <li>Why we need Android Studio (native modules)</li>
+    <li>What you need before starting</li>
+    <li>Prepare Windows (virtualization, long paths)</li>
+    <li>System setup: install the tools</li>
+    <li>Android Studio: first-time setup wizard</li>
+    <li>Android Studio: SDK Manager (what to tick)</li>
+    <li>Environment variables (JAVA_HOME, ANDROID_HOME)</li>
+    <li>Create an emulator (virtual phone)</li>
+    <li>ADB: connecting emulators and real phones</li>
+    <li>Run the application</li>
+    <li>Daily workflow</li>
+    <li>Troubleshooting</li>
+    <li>Quick checklist</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<h2>1. Why we need Android Studio (native modules)</h2>
+
+<p>Many Expo tutorials say "install the <b>Expo Go</b> app on your phone and scan a QR code". <b>That does not work for this project.</b></p>
+
+<h3>What is a native module?</h3>
+<p>A React Native app has two layers:</p>
+<ul>
+  <li><b>JavaScript/TypeScript layer:</b> our screens, logic and styling (everything in <code>src\</code>).</li>
+  <li><b>Native layer:</b> real Android (Kotlin/Java/C++) code compiled into the app. Libraries that need phone features or very high speed ship their own native code. These are called <b>native modules</b>.</li>
+</ul>
+
+<p>This project uses several libraries with native code, for example:</p>
+<table>
+  <tr><th>Library</th><th>What it does in our app</th></tr>
+  <tr><td><code>react-native-mmkv</code> + <code>react-native-nitro-modules</code></td><td>Fast, encrypted local storage (login token, theme, language)</td></tr>
+  <tr><td><code>react-native-reanimated</code> + <code>react-native-worklets</code></td><td>Smooth animations</td></tr>
+  <tr><td><code>react-native-keyboard-controller</code></td><td>Keyboard handling on forms</td></tr>
+  <tr><td><code>react-native-gesture-handler</code>, <code>@gorhom/bottom-sheet</code></td><td>Swipes and bottom sheets</td></tr>
+  <tr><td><code>react-native-restart</code></td><td>Restarts the app after changing language</td></tr>
+  <tr><td><code>expo-dev-client</code></td><td>Turns our app into a "development build" with a developer menu</td></tr>
+</table>
+
+<h3>Why Expo Go is not enough</h3>
+<p>Expo Go is a ready-made app from the Play Store. It only contains a <b>fixed set</b> of native modules chosen by Expo. Libraries like <b>MMKV / Nitro Modules</b> and <b>react-native-restart</b> are not inside it. If you open our project in Expo Go, it crashes with a "native module not found / not supported in Expo Go" type of error.</p>
+
+<h3>The solution: a development build</h3>
+<p>We compile <b>our own</b> version of the app on our computer. It contains every native module we use. This is called a <b>development build</b>. Compiling an Android app needs:</p>
+<ul>
+  <li><b>JDK 17:</b> Java, used by the Android build tool (Gradle)</li>
+  <li><b>Android SDK:</b> Android libraries and build tools</li>
+  <li><b>An emulator or a real phone</b> to install the app on</li>
+</ul>
+<p><b>Android Studio</b> is the easiest way to install the Android SDK and the emulator. We don't write code in Android Studio (we use VS Code or Cursor). We only use it for setup and to start the emulator.</p>
+
+<div class="diagram">  pnpm android
+      │
+      ├─ 1. Expo generates the  android\  folder (native project)
+      ├─ 2. Gradle + JDK 17 + Android SDK compile it  →  app-debug.apk   (slow, first time 10–20 min)
+      ├─ 3. ADB installs the APK on the emulator / phone
+      └─ 4. Metro bundler serves our JavaScript  →  app opens          (fast, every time)
+
+  Later, JS/TS changes  →  only step 4 (instant Fast Refresh)
+  New native library or app.config.ts change  →  run  pnpm android  again</div>
+
+<!-- ============================================================ -->
+<h2>2. What you need before starting</h2>
+<table>
+  <tr><th>Item</th><th>Requirement</th></tr>
+  <tr><td>Operating system</td><td>Windows 10 64-bit (version 1809+) or Windows 11</td></tr>
+  <tr><td>Memory (RAM)</td><td>8 GB minimum, <b>16 GB recommended</b> (the emulator uses a lot)</td></tr>
+  <tr><td>Free disk space</td><td><b>At least 30 GB</b> on drive C: (Android SDK + emulator image + project). An SSD is strongly recommended.</td></tr>
+  <tr><td>CPU</td><td>Intel or AMD 64-bit with <b>virtualization</b> support (almost every modern PC)</td></tr>
+  <tr><td>Internet</td><td>Stable connection. Several GB of downloads the first time.</td></tr>
+  <tr><td>Access</td><td>Administrator rights on the PC and access to the GitHub repository</td></tr>
+  <tr><td>Expo account</td><td><b>Not needed</b> to run the app locally</td></tr>
+</table>
+<div class="note"><b>iPhone / iOS:</b> iOS apps can only be built on a Mac. On Windows you develop and test on <b>Android</b>.</div>
+
+<!-- ============================================================ -->
+<h2 class="page-break">3. Prepare Windows (virtualization, long paths)</h2>
+
+<h3><span class="step">3.1</span>Check that virtualization is enabled</h3>
+<p>The emulator needs CPU virtualization, or it will be extremely slow or won't start.</p>
+<ol>
+  <li>Press <code>Ctrl + Shift + Esc</code> to open <b>Task Manager</b>.</li>
+  <li>Open the <span class="click">Performance</span> tab → <span class="click">CPU</span>.</li>
+  <li>Bottom right, look for <b>Virtualization: Enabled</b>.</li>
+</ol>
+<p>If it says <b>Disabled</b>, restart the PC, enter the BIOS/UEFI (usually <code>F2</code>, <code>F10</code>, <code>Del</code> or <code>Esc</code> during startup), and enable <b>Intel VT-x / Intel Virtualization Technology</b> or <b>AMD-V / SVM Mode</b>. Save and restart. If you're not sure how, ask IT.</p>
+
+<h3><span class="step">3.2</span>Turn on Windows Hypervisor Platform</h3>
+<p>Open PowerShell <b>as Administrator</b> and run:</p>
+<pre>Enable-WindowsOptionalFeature -Online -FeatureName HypervisorPlatform -All</pre>
+<p>Type <code>Y</code> to restart when asked.</p>
+<p style="color:var(--muted)">Or by clicking: Windows key → type <i>Turn Windows features on or off</i> → tick <b>Windows Hypervisor Platform</b> → OK → restart.</p>
+
+<h3><span class="step">3.3</span>Enable long file paths (important!)</h3>
+<p>Android builds create very deep folders. By default Windows limits paths to 260 characters, and the build fails with strange C++/CMake errors. Run in PowerShell <b>as Administrator</b>:</p>
+<pre>New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force</pre>
+<div class="note"><b>Also:</b> keep the project in a <b>short folder</b> such as <code>C:\dev\expo-crud-starter</code>. Avoid paths like <code>C:\Users\Your Name\OneDrive\Desktop\Projects\…</code>. Long paths, <b>spaces</b> and <b>OneDrive</b> folders cause build errors.</div>
+
+<!-- ============================================================ -->
+<h2 class="page-break">4. System setup: install the tools</h2>
+<p>Windows 10/11 includes <b>winget</b>, the built-in Windows package installer. We use it instead of downloading each installer by hand. Open a <b>normal</b> PowerShell window (not Administrator) and check that it works:</p>
+<pre>winget --version</pre>
+<p style="color:var(--muted)">If <code>winget</code> is not found, install or update <b>App Installer</b> from the Microsoft Store, then reopen PowerShell.</p>
+
+<h3><span class="step">4.1</span>Install Node.js, Git, Java 17 and Android Studio</h3>
+<pre>winget install -e --id OpenJS.NodeJS.LTS
+winget install -e --id Git.Git
+winget install -e --id Microsoft.OpenJDK.17
+winget install -e --id Google.AndroidStudio</pre>
+<p>Accept any prompts (type <code>Y</code>, or click <span class="click">Yes</span> on Windows permission popups).</p>
+<ul>
+  <li><b>Node.js LTS:</b> runs JavaScript tools (version 20 or newer is required)</li>
+  <li><b>Git:</b> downloads the code from GitHub</li>
+  <li><b>Microsoft OpenJDK 17:</b> Java Development Kit 17, needed by Android builds. <b>Use 17, not newer.</b></li>
+  <li><b>Android Studio:</b> installs the Android SDK manager and emulator</li>
+</ul>
+<div class="note"><b>Close PowerShell and open a new window</b> after these installs. Otherwise the new commands are not found.</div>
+
+<h3><span class="step">4.2</span>Allow PowerShell to run npm/pnpm scripts</h3>
+<p>By default PowerShell blocks script files, which stops <code>pnpm</code> from running. Run this once:</p>
+<pre>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</pre>
+<p>Type <code>Y</code> and press Enter if asked.</p>
+
+<h3><span class="step">4.3</span>Install pnpm (our package manager)</h3>
+<pre>npm install -g pnpm</pre>
+<div class="note"><b>Important:</b> this project <b>only</b> works with <code>pnpm</code>. <code>npm install</code> and <code>yarn</code> are blocked on purpose.</div>
+
+<h3><span class="step">4.4</span>Allow Git to handle long paths</h3>
+<pre>git config --global core.longpaths true</pre>
+
+<h3><span class="step">4.5</span>Check the versions</h3>
+<pre>node -v
+pnpm -v
+java -version
+git --version</pre>
+<p>Expected: Node <b>v20</b> or higher, pnpm <b>10.x</b>, Java <b>"17.x"</b>. If <code>java -version</code> shows a different version or is not found, finish Part 7 first, then check again.</p>
+<p style="color:var(--muted)">Watchman is not needed on Windows.</p>
+
+<!-- ============================================================ -->
+<h2 class="page-break">5. Android Studio: first-time setup wizard</h2>
+
+<p>Open the Start menu → <span class="click">Android Studio</span>.</p>
+
+<table>
+  <tr><th style="width:32%">Screen you see</th><th>What to select</th></tr>
+  <tr><td>Import Android Studio Settings</td><td><span class="click">Do not import settings</span> → OK</td></tr>
+  <tr><td>Help improve Android Studio (data sharing)</td><td>Your choice: <span class="click">Don't send</span> is fine</td></tr>
+  <tr><td>Welcome</td><td><span class="click">Next</span></td></tr>
+  <tr><td>Install Type</td><td><span class="click">Standard</span> → Next</td></tr>
+  <tr><td>Select UI Theme</td><td>Any (Dark / Light) → Next</td></tr>
+  <tr><td>Verify Settings</td><td>Check that it lists <b>Android SDK</b>, <b>Android SDK Platform</b>, <b>Android Emulator</b> and (on Intel/AMD PCs) <b>Android Emulator hypervisor driver</b> → Next</td></tr>
+  <tr><td>License Agreement</td><td>Click <b>each</b> item on the left (e.g. <i>android-sdk-license</i>, <i>android-sdk-preview-license</i>) and choose <span class="click">Accept</span> for every one → Finish</td></tr>
+  <tr><td>Downloading Components</td><td>Wait. This can take 10–30 minutes. Click <span class="click">Yes</span> on any Windows permission popup (for the hypervisor driver). Then click <span class="click">Finish</span>.</td></tr>
+</table>
+
+<div class="ok">The SDK is installed in <code>C:\Users\&lt;your-name&gt;\AppData\Local\Android\Sdk</code> (in PowerShell: <code>$env:LOCALAPPDATA\Android\Sdk</code>). We'll use this path in Part 7.</div>
+
+<div class="note">If the wizard does not appear, or you skipped it by mistake, open Android Studio and go to <span class="click">More Actions → SDK Manager</span> and follow Part 6.</div>
+
+<!-- ============================================================ -->
+<h2>6. Android Studio: SDK Manager (what to tick)</h2>
+
+<p>On the Android Studio welcome screen, click <span class="click">More Actions → SDK Manager</span>. If a project is open, use <span class="click">File → Settings → Languages &amp; Frameworks → Android SDK</span> instead.</p>
+
+<h3>Tab 1: SDK Platforms</h3>
+<p>Tick <span class="click">Show Package Details</span> (bottom right), then expand <b>Android 16.0 ("Baklava") – API Level 36</b> and tick:</p>
+<ul>
+  <li>☑ <b>Android SDK Platform 36</b></li>
+  <li>☑ <b>Google Play Intel x86_64 Atom System Image</b> (normal Intel/AMD PCs)<br>
+      <span style="color:var(--muted)">Only on ARM laptops (e.g. Snapdragon / Copilot+ PCs): <b>Google Play ARM 64 v8a System Image</b></span></li>
+</ul>
+<p style="color:var(--muted)">Expo SDK 54 builds against API 36. If you need to test older Android versions, you can install additional system images later.</p>
+
+<h3>Tab 2: SDK Tools</h3>
+<p>Tick <span class="click">Show Package Details</span> and make sure these are ticked:</p>
+<ul>
+  <li>☑ <b>Android SDK Build-Tools</b> → expand and tick <b>36.0.0</b></li>
+  <li>☑ <b>Android SDK Command-line Tools (latest)</b></li>
+  <li>☑ <b>Android Emulator</b></li>
+  <li>☑ <b>Android SDK Platform-Tools</b> (this contains <code>adb</code>)</li>
+  <li>☑ <b>Android Emulator hypervisor driver (installer)</b> (Intel/AMD PCs)</li>
+  <li>☑ <b>Google USB Driver</b> (only needed to use a real <b>Pixel</b> phone over USB)</li>
+  <li>☐ NDK (Side by side) and CMake are <b>optional</b>. The build downloads the right versions automatically when needed.</li>
+</ul>
+<p>Click <span class="click">Apply → OK</span>, accept the licenses, and wait for the download to finish.</p>
+
+<!-- ============================================================ -->
+<h2 class="page-break">7. Environment variables (JAVA_HOME, ANDROID_HOME)</h2>
+<p>Windows needs to know where Java and the Android SDK are. Copy this whole block into a <b>normal</b> PowerShell window and run it <b>once</b>:</p>
+<pre>$jdk = (Get-ChildItem "C:\Program Files\Microsoft" -Directory -Filter "jdk-17*" | Select-Object -First 1).FullName
+$sdk = "$env:LOCALAPPDATA\Android\Sdk"
+[Environment]::SetEnvironmentVariable("JAVA_HOME", $jdk, "User")
+[Environment]::SetEnvironmentVariable("ANDROID_HOME", $sdk, "User")
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+[Environment]::SetEnvironmentVariable("Path", "$userPath;$sdk\platform-tools;$sdk\emulator", "User")
+Write-Host "JAVA_HOME = $jdk"
+Write-Host "ANDROID_HOME = $sdk"</pre>
+<p>Check that both printed paths are real folders. <code>JAVA_HOME</code> should look like <code>C:\Program Files\Microsoft\jdk-17.0.x.x-hotspot</code>.</p>
+
+<p>Now <b>close every PowerShell / VS Code window</b> and open a new PowerShell. Then check:</p>
+<pre>echo $env:JAVA_HOME
+echo $env:ANDROID_HOME
+java -version
+adb --version
+emulator -version</pre>
+<p>All five commands should print something. None of them should say <i>"is not recognized as the name of a cmdlet"</i>.</p>
+
+<h3>Prefer clicking? Set them by hand</h3>
+<ol>
+  <li>Windows key → type <i>environment variables</i> → open <span class="click">Edit environment variables for your account</span>.</li>
+  <li>Under <b>User variables</b> click <span class="click">New…</span>:
+    <ul>
+      <li>Name <code>ANDROID_HOME</code> → Value <code>C:\Users\&lt;your-name&gt;\AppData\Local\Android\Sdk</code></li>
+      <li>Name <code>JAVA_HOME</code> → Value <code>C:\Program Files\Microsoft\jdk-17.0.x.x-hotspot</code> (check the exact folder name in File Explorer)</li>
+    </ul></li>
+  <li>Select <b>Path</b> → <span class="click">Edit…</span> → <span class="click">New</span>, and add both:
+    <ul>
+      <li><code>%ANDROID_HOME%\platform-tools</code></li>
+      <li><code>%ANDROID_HOME%\emulator</code></li>
+    </ul></li>
+  <li>Click <span class="click">OK</span> on every window, then reopen PowerShell.</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 class="page-break">8. Create an emulator (virtual phone)</h2>
+
+<ol>
+  <li>Open Android Studio. On the welcome screen click <span class="click">More Actions → Virtual Device Manager</span>.</li>
+  <li>Click <span class="click">+ (Create Virtual Device)</span>.</li>
+  <li><b>Select Hardware:</b> category <span class="click">Phone</span> → choose <span class="click">Pixel 8</span> (any recent Pixel is fine). Prefer devices with the <b>Play Store</b> icon → <span class="click">Next</span>.</li>
+  <li><b>System Image:</b> choose <b>API 36</b> (<i>Baklava / Android 16</i>), <b>Google Play</b>, ABI <b>x86_64</b>. On ARM laptops, choose <b>arm64-v8a</b>. If a download icon ⬇ appears next to it, click it and wait. Then click <span class="click">Next</span>.</li>
+  <li><b>Verify Configuration:</b>
+    <ul>
+      <li>AVD Name: keep the default, e.g. <code>Pixel_8</code> (no spaces is easiest)</li>
+      <li>Startup orientation: Portrait</li>
+      <li>Click <span class="click">Show Advanced Settings</span> (in newer versions this is the <i>Additional settings</i> tab):
+        <ul>
+          <li>Graphics: <b>Hardware</b> (or <i>Automatic</i>)</li>
+          <li>RAM: <b>4096 MB</b> if your PC has 16 GB, otherwise <b>2048 MB</b></li>
+          <li>Internal Storage: <b>8 GB</b> or more (our debug app is large)</li>
+        </ul>
+      </li>
+    </ul>
+    Click <span class="click">Finish</span>.</li>
+  <li>In the Device Manager list, click <span class="click">▶ (Play)</span> next to your device. A phone window opens and boots Android. The first boot can take 1–3 minutes.</li>
+</ol>
+
+<h3>Start the emulator from PowerShell (optional, faster)</h3>
+<pre>emulator -list-avds          # shows your emulator names, e.g. Pixel_8
+emulator -avd Pixel_8        # starts it (keep this window open)</pre>
+<p>If the emulator acts strangely, use a cold boot: <code>emulator -avd Pixel_8 -no-snapshot-load</code></p>
+<div class="note">If you get <i>"x86_64 emulation currently requires hardware acceleration"</i>, go back to Part 3.1 and 3.2. Virtualization must be enabled and Windows Hypervisor Platform must be on.</div>
+
+<!-- ============================================================ -->
+<h2 class="page-break">9. ADB: connecting emulators and real phones</h2>
+
+<p><b>ADB (Android Debug Bridge)</b> is the tool that lets your PC talk to an Android device. It installs the app and forwards network ports. It comes with <i>Android SDK Platform-Tools</i>.</p>
+
+<h3>9.1 Check connected devices</h3>
+<p>With the emulator running:</p>
+<pre>adb devices</pre>
+<p>Expected output:</p>
+<pre>List of devices attached
+emulator-5554   device</pre>
+
+<table>
+  <tr><th>Status shown</th><th>Meaning</th><th>Fix</th></tr>
+  <tr><td><code>device</code></td><td>Connected and ready ✅</td><td>Nothing to fix</td></tr>
+  <tr><td><i>(empty list)</i></td><td>No device found</td><td>Start the emulator, or plug in your phone and enable USB debugging (9.3)</td></tr>
+  <tr><td><code>offline</code></td><td>Device is still booting or stuck</td><td>Wait 30 seconds, or run the restart commands in 9.2</td></tr>
+  <tr><td><code>unauthorized</code></td><td>Phone hasn't trusted this PC</td><td>Unlock the phone and tap <b>Allow</b> on the "Allow USB debugging?" popup</td></tr>
+</table>
+
+<h3>9.2 Restart ADB (fixes most connection problems)</h3>
+<pre>adb kill-server
+adb start-server
+adb devices</pre>
+
+<h3>9.3 Use a real Android phone instead of an emulator (USB)</h3>
+<ol>
+  <li>On the phone, open <span class="click">Settings → About phone</span> and tap <b>Build number</b> <b>7 times</b>. You'll see <i>"You are now a developer"</i>. On Samsung it's under <i>Software information</i>; on Xiaomi, tap <i>MIUI/OS version</i>.</li>
+  <li>Go to <span class="click">Settings → System → Developer options</span> and turn on <b>USB debugging</b>.</li>
+  <li>Connect the phone to the PC with a <b>data</b> USB cable. Some cables only charge.</li>
+  <li><b>Windows USB driver:</b> Pixel phones use the <b>Google USB Driver</b> (Part 6). Samsung, Xiaomi, OnePlus and other brands need the manufacturer's USB driver (search "<i>&lt;brand&gt; USB driver Windows</i>").</li>
+  <li>On the phone, tap <b>Allow</b> (tick <i>Always allow from this computer</i>).</li>
+  <li>Run <code>adb devices</code>. Your phone's serial number should appear with status <code>device</code>.</li>
+  <li>Let the phone reach the local mock API through the USB cable:
+<pre>adb reverse tcp:3001 tcp:3001     # mock API
+adb reverse tcp:8081 tcp:8081     # Metro bundler (Expo usually does this automatically)</pre>
+  With <code>adb reverse</code>, the phone can use <code>http://localhost:3001/</code> in <code>.env</code>. Run these again each time you reconnect the cable.</li>
+</ol>
+
+<h3>9.4 Wireless debugging (Android 11+, optional)</h3>
+<p>Phone and PC must be on the same Wi-Fi. On the phone, open <span class="click">Developer options → Wireless debugging → Pair device with pairing code</span>. Then on the PC:</p>
+<pre>adb pair &lt;ip&gt;:&lt;pairing-port&gt;      # enter the 6-digit code shown on the phone
+adb connect &lt;ip&gt;:&lt;port&gt;           # the IP:port shown on the Wireless debugging screen
+adb devices</pre>
+
+<h3>9.5 Several devices connected?</h3>
+<p>If <code>adb devices</code> lists more than one device, <code>pnpm android</code> asks which one to use. You can also pick one directly:</p>
+<pre>pnpm android --device</pre>
+
+<!-- ============================================================ -->
+<h2 class="page-break">10. Run the application</h2>
+
+<h3><span class="step">10.1</span>Get the code (into a short folder)</h3>
+<pre>mkdir C:\dev -Force
+cd C:\dev
+git clone https://github.com/saiphoenix/expo-crud-starter.git
+cd expo-crud-starter</pre>
+<p>If GitHub asks you to log in, a browser window opens. Sign in. If the repository is private, ask the owner to add you as a collaborator first.</p>
+
+<h3><span class="step">10.2</span>Install dependencies (the first command after cloning)</h3>
+<pre>pnpm install</pre>
+<p>This downloads all libraries into <code>node_modules\</code> and takes a few minutes.</p>
+
+<h3><span class="step">10.3</span>Set the API address in <code>.env</code></h3>
+<p>The project includes a <code>.env</code> file that points to a local fake backend (the <b>mock API</b>). An Android emulator can't reach your PC at <code>localhost</code>. It uses the special address <b>10.0.2.2</b> instead.</p>
+<table>
+  <tr><th>Where the app runs</th><th><code>EXPO_PUBLIC_API_URL</code> in <code>.env</code></th></tr>
+  <tr><td>Android <b>emulator</b></td><td><code>http://10.0.2.2:3001/</code></td></tr>
+  <tr><td>Real phone over USB with <code>adb reverse</code> (9.3)</td><td><code>http://localhost:3001/</code></td></tr>
+  <tr><td>Real phone over Wi-Fi</td><td><code>http://&lt;your-PC-IP&gt;:3001/</code> (find the <i>IPv4 Address</i> with <code>ipconfig</code>)</td></tr>
+  <tr><td>Remote demo API (no local backend)</td><td><code>https://dummyjson.com/</code></td></tr>
+</table>
+<p>For the emulator, run:</p>
+<pre>(Get-Content .env) -replace 'localhost:3001', '10.0.2.2:3001' | Set-Content .env
+Get-Content .env</pre>
+<p>You should see <code>EXPO_PUBLIC_API_URL=http://10.0.2.2:3001/</code>. You can also open it with <code>notepad .env</code> and edit it by hand.</p>
+
+<h3><span class="step">10.4</span>Start the mock API (PowerShell window 1, keep it open)</h3>
+<pre>pnpm mock:api</pre>
+<p>Expected: <code>🚀 Mock API on http://localhost:3001</code>. Every product you create, edit or delete is saved in <code>mock-api\db.json</code>.</p>
+<div class="note"><b>Windows Firewall popup:</b> if Windows asks whether to allow <b>Node.js</b> on the network, tick <b>Private networks</b> and click <span class="click">Allow</span>.</div>
+
+<h3><span class="step">10.5</span>Start the emulator</h3>
+<p>Start it from Android Studio (Part 8, step 6) or with <code>emulator -avd Pixel_8</code>. Confirm with <code>adb devices</code>.</p>
+
+<h3><span class="step">10.6</span>Build and run the app (PowerShell window 2)</h3>
+<p>Open a <b>second</b> PowerShell window (or a new tab in Windows Terminal with <code>Ctrl + Shift + T</code>), then run:</p>
+<pre>cd C:\dev\expo-crud-starter
+pnpm android</pre>
+<p>What happens:</p>
+<ol>
+  <li>Expo creates the <code>android\</code> folder. This is generated code; never edit it by hand.</li>
+  <li>Gradle compiles the native app. <b>The first time takes 10–20 minutes</b> on Windows and downloads a lot. Later builds are much faster.</li>
+  <li>The app is installed on the emulator and opens automatically.</li>
+  <li>Metro (the JavaScript bundler) keeps running in this window. Leave it open.</li>
+</ol>
+
+<h3><span class="step">10.7</span>Use the app</h3>
+<ol>
+  <li>Onboarding screen → tap <b>Let's Get Started</b></li>
+  <li>Login → this is a demo login. Use <b>any email</b> and <b>any 6-character password</b>, e.g. <code>test@test.com</code> / <code>123456</code></li>
+  <li>Tabs: <b>Feed</b> (template example), <b>Products</b> (our CRUD reference), <b>Style</b> (UI kit), <b>Settings</b></li>
+</ol>
+
+<div class="ok"><b>Done!</b> Change any text in <code>src\</code> and save. The app updates instantly (Fast Refresh).</div>
+
+<!-- ============================================================ -->
+<h2>11. Daily workflow (after the first build)</h2>
+<p>You do <b>not</b> need to run <code>pnpm android</code> every day. Use:</p>
+<pre># Window 1 – backend
+cd C:\dev\expo-crud-starter; pnpm mock:api
+
+# Window 2 – start the emulator first, then:
+cd C:\dev\expo-crud-starter; pnpm start -c
+#   then press  a  to open the app on Android</pre>
+
+<table>
+  <tr><th>When…</th><th>Run</th></tr>
+  <tr><td>You only changed JS/TS code</td><td>Nothing. Fast Refresh updates the app.</td></tr>
+  <tr><td>You changed <code>.env</code></td><td>Stop Metro (Ctrl + C) → <code>pnpm start -c</code></td></tr>
+  <tr><td>You pulled new code with new packages</td><td><code>pnpm install</code></td></tr>
+  <tr><td>A <b>native</b> library was added, or <code>app.config.ts</code> changed</td><td><code>pnpm install</code> → <code>pnpm android</code> (rebuild)</td></tr>
+  <tr><td>Open the developer menu in the app</td><td>Press <code>m</code> in the Metro window, or <code>Ctrl + M</code> in the emulator</td></tr>
+  <tr><td>Reload the app</td><td>Press <code>r</code> in the Metro window</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 class="page-break">12. Troubleshooting</h2>
+<table>
+  <tr><th style="width:38%">Problem / error message</th><th>Fix</th></tr>
+  <tr><td><i>"… is not recognized as the name of a cmdlet"</i> (pnpm, adb, java, emulator)</td><td>Close <b>all</b> PowerShell / VS Code windows and reopen. If it still fails, redo Part 7.</td></tr>
+  <tr><td><i>"pnpm.ps1 cannot be loaded because running scripts is disabled"</i></td><td>Run Part 4.2: <code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code></td></tr>
+  <tr><td>App crashes with a native module error, e.g. <i>"not supported in Expo Go"</i></td><td>You opened the project in <b>Expo Go</b>. Uninstall Expo Go from the emulator, then run <code>pnpm android</code> to install our development build (Part 1).</td></tr>
+  <tr><td><code>SDK location not found. Define ANDROID_HOME…</code></td><td>Redo Part 7. Check that <code>echo $env:ANDROID_HOME</code> prints a folder that exists.</td></tr>
+  <tr><td><code>Unsupported class file major version</code> / Java version errors</td><td>The wrong Java version is in use. Make sure <code>java -version</code> shows <b>17</b> and <code>JAVA_HOME</code> points to <code>jdk-17…</code> (Part 7).</td></tr>
+  <tr><td>CMake / ninja errors, <i>"Filename longer than 260 characters"</i>, <i>"No such file or directory"</i> inside <code>.cxx</code></td><td>Path too long. Do Part 3.3 (LongPathsEnabled), move the project to <code>C:\dev\expo-crud-starter</code>, delete the <code>android</code> folder and rebuild.</td></tr>
+  <tr><td>Emulator: <i>"requires hardware acceleration"</i> or extremely slow</td><td>Enable virtualization in the BIOS and Windows Hypervisor Platform (Parts 3.1 and 3.2). Use an <b>x86_64</b> image. Set Graphics to <b>Hardware</b>.</td></tr>
+  <tr><td><code>No Android connected device found</code></td><td>Start the emulator and check <code>adb devices</code> (Part 9). If needed, run <code>adb kill-server; adb start-server</code>.</td></tr>
+  <tr><td>Real phone not shown in <code>adb devices</code></td><td>Use a data cable, enable USB debugging, install the phone's USB driver (9.3), tap <b>Allow</b> on the phone.</td></tr>
+  <tr><td><code>INSTALL_FAILED_INSUFFICIENT_STORAGE</code></td><td>Device Manager → ⋮ next to the emulator → <b>Wipe Data</b>, or increase Internal Storage (Part 8).</td></tr>
+  <tr><td>Products tab shows <b>Network Error</b></td><td>Check that <code>pnpm mock:api</code> is running, that <code>.env</code> uses <code>10.0.2.2</code> (emulator), that Node.js is allowed through the Windows Firewall, then restart with <code>pnpm start -c</code>.</td></tr>
+  <tr><td>Red screen: <i>"Unable to load script"</i></td><td>Metro isn't running. Run <code>pnpm start</code> and press <code>a</code>. On a real phone, run <code>adb reverse tcp:8081 tcp:8081</code>.</td></tr>
+  <tr><td><code>Port 8081 already in use</code></td><td><code>npx kill-port 8081</code> then try again</td></tr>
+  <tr><td>Gradle build fails with strange errors</td><td>Clean and rebuild:<br><code>cd android; .\gradlew clean; cd ..</code><br><code>pnpm android</code><br>If it still fails: <code>Remove-Item -Recurse -Force android</code> then <code>pnpm android</code>. The folder is regenerated.</td></tr>
+  <tr><td><i>"EPERM: operation not permitted"</i> / file locked errors</td><td>Close VS Code and other terminals, stop Metro, and try again. If the project is inside OneDrive, move it to <code>C:\dev</code>.</td></tr>
+  <tr><td>Builds are very slow</td><td>Normal the first time. Optionally add <code>C:\dev</code> and <code>%USERPROFILE%\.gradle</code> to the Windows Security exclusions, but only if your IT policy allows it.</td></tr>
+  <tr><td>Old screens or weird behaviour after a change</td><td>Stop Metro → <code>pnpm start -c</code> (clears the cache)</td></tr>
+  <tr><td><code>pnpm install</code> fails with <b>401 Unauthorized</b></td><td>Your PC points to a private package registry. Run:<br><code>npm config set registry https://registry.npmjs.org/</code> and try again.</td></tr>
+  <tr><td><i>"Use pnpm instead"</i> / <code>only-allow</code> error</td><td>You ran <code>npm install</code> or <code>yarn</code>. Use <code>pnpm install</code>.</td></tr>
+  <tr><td>Still stuck?</td><td>Run <code>pnpm doctor</code> and share the output and the full error with the team.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2>13. Quick checklist</h2>
+<table>
+  <tr><th style="width:6%">✓</th><th>Step</th><th>Check with</th></tr>
+  <tr><td>☐</td><td>Virtualization enabled, Windows Hypervisor Platform on, long paths enabled</td><td>Task Manager → CPU</td></tr>
+  <tr><td>☐</td><td>Node, Git, JDK 17, Android Studio, pnpm installed</td><td><code>node -v; pnpm -v; java -version</code></td></tr>
+  <tr><td>☐</td><td>Android Studio setup wizard finished (Standard)</td><td><code>dir $env:LOCALAPPDATA\Android\Sdk</code></td></tr>
+  <tr><td>☐</td><td>SDK Platform 36, Build-Tools 36, Platform-Tools, Emulator, Command-line Tools</td><td>SDK Manager</td></tr>
+  <tr><td>☐</td><td>JAVA_HOME, ANDROID_HOME and Path set</td><td><code>echo $env:ANDROID_HOME</code></td></tr>
+  <tr><td>☐</td><td>Emulator created and booted</td><td><code>adb devices</code> → <code>device</code></td></tr>
+  <tr><td>☐</td><td>Repo cloned into <code>C:\dev</code> and <code>pnpm install</code> done</td><td><code>node_modules\</code> exists</td></tr>
+  <tr><td>☐</td><td><code>.env</code> → <code>http://10.0.2.2:3001/</code></td><td><code>Get-Content .env</code></td></tr>
+  <tr><td>☐</td><td>Mock API running</td><td><code>pnpm mock:api</code></td></tr>
+  <tr><td>☐</td><td>App built and opened</td><td><code>pnpm android</code></td></tr>
+  <tr><td>☐</td><td>Logged in and Products tab loads</td><td>In the app</td></tr>
+</table>
+
+<p style="color:var(--muted); margin-top:18px">More details in the repository: <code>docs/01-getting-started.md</code>, <code>docs/12-environments-and-builds.md</code>, <code>docs/14-debugging-and-common-mistakes.md</code>, <code>docs/16-mock-api.md</code>.</p>
+
+</body>
+</html>
